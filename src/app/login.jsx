@@ -24,13 +24,13 @@ export default function LoginScreen() {
           value={username}
           onChangeText={setUsername}
         />
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Ingresa tu email"
           placeholderTextColor="#999"
           value={email}
           onChangeText={setEmail}
-        />
+        /> */}
 
         <TextInput
           style={styles.input}
@@ -41,7 +41,7 @@ export default function LoginScreen() {
           onChangeText={setPassword}
         />
 
-        <TouchableOpacity style={styles.button} onPress={() => login(email,password)}>
+        <TouchableOpacity style={styles.button} onPress={() => login(username,password)}>
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
       </View>
