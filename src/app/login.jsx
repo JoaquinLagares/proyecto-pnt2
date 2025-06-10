@@ -2,12 +2,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useAuth } from '../context/AuthContext';  
+import { Link, useRouter } from 'expo-router';
 
 export default function LoginScreen() {
-  const { login, register } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
   return (
     <KeyboardAvoidingView
@@ -45,8 +47,8 @@ export default function LoginScreen() {
             <Text style={styles.buttonText}>Entrar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={() => register(username,email,password)}>
-            <Text style={styles.buttonText}>Signup</Text>
+          <TouchableOpacity style={styles.button} onPress={() => router.push('/registrar')}>
+              <Text style={styles.buttonText}>Signup</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -56,7 +58,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0e0e11', // fondo más oscuro, bien gamer
+    backgroundColor: '#1a1f2e', 
     justifyContent: 'center',
     paddingHorizontal: 20,
   },

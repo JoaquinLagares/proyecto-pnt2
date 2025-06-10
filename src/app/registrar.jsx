@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useAuth } from '../context/AuthContext';
+import { Link, useRouter } from 'expo-router'
 
 export default function RegisterScreen() {
-    const { signup } = useAuth();
+    const { register } = useAuth();
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState(''); 
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const router = useRouter();
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS ==='ios' ? 'padding' : 'height'}
-            style={StyleSheet.container}
+            style={styles.container}
         >
             <View style={styles.card}>
-                <Text styles={styles.title}>Registrar Cuenta</Text>
+                <Text style={styles.title}>Registrar Cuenta</Text>
 
                 <TextInput
                     style={styles.input}
@@ -50,8 +52,13 @@ export default function RegisterScreen() {
                     onChangeText={setConfirmPassword}
                 />
                 <View style={styles.buttonGroup}>
-                    <TouchableOpacity style={styles.button} onPress={() => signup(username, email, password, confirmPassword)}>
+                    <TouchableOpacity style={styles.button} onPress={() => register(username, email, password, confirmPassword)}>
                         <Text style={styles.buttonText}>Registrar</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.buttonGroup}>
+                    <TouchableOpacity style={styles.button} onPress={() => router.push('/login')}>
+                        <Text style={styles.buttonText}>Cancelar</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -61,7 +68,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0e0e11', // fondo más oscuro, bien gamer
+    backgroundColor: '#1a1f2e', 
     justifyContent: 'center',
     paddingHorizontal: 20,
   },

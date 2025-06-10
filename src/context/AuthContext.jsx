@@ -73,21 +73,47 @@ export  const AuthProvider = ({ children }) => {
 
     const logout = () => setIsAuth(false)
 
+    const checkPassword = async (password, confirmPassword) => {
+        try {
+            if (password !== confirmPassword) {
+                alert('Las contraseñas no coinciden');
+                return false;
+            }
+            if (password.length < 6) {
+                alert('La contraseña debe tener al menos 6 caracteres');
+                return false;
+            }
+            return true;
+            }
+        catch (error) {
+            console.error(error);
+            alert('Error al verificar la contraseña');
+            return false;
+        }
+    }
+
     const checkDuplicate = async (username, email) => {
         try {
             const existingUser= await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?username=' + username);
-            // const existingUsers = await existingUser.json();
             const existingEmail = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?email=' + email);
-            // const existingEmails = await existingEmail.json();
             const [userRes, emailRes] = await Promise.all([existingUser, existingEmail]);
-            const existingUsers = await userRes.json();
-            const existingEmails = await emailRes.json();
+            let existingUsers = await userRes.json();
+            let existingEmails = await emailRes.json();
+            
+            if (existingUsers === 'Not found') {
+                existingUsers = ''
+            }
+            if (existingEmails === 'Not found') {
+                existingEmails = ''
+            }
+            console.log(existingUsers,existingEmails);
+            
             if (existingUsers.length > 0) {
-                alert('El nombre de usuario ya está en uso');
+                console.log("Ya existe usuario");
                 return;
             }
             if (existingEmails.length > 0) {
-                alert('El email ya está en uso');
+                console.log("Ya existe email");
                 return;
             }
         } catch (error) {
@@ -97,10 +123,13 @@ export  const AuthProvider = ({ children }) => {
         return true;
     }
 
-    const register = async (username, email, password) => {
+    const register = async (username, email, password, confirmPassword) => {
         try{
             const isUnique = await checkDuplicate(username, email);
             if (!isUnique) return;
+
+            const passOkay = await checkPassword(password, confirmPassword);
+            if (!passOkay) return;
 
             const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users', {
                 method: 'POST',
