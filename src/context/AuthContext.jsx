@@ -50,10 +50,10 @@ export  const AuthProvider = ({ children }) => {
         try{
             const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users')
             const data = await response.json()
-            console.log(data)
+            // console.log(data)
 
             const user = data.find(u =>u.username === usuario && u.password === password )
-            console.log(user)
+            // console.log(user)
             if(user){
                 await AsyncStorage.setItem('isAuthenticated','true')
                 await AsyncStorage.setItem('userData', JSON.stringify(user))
@@ -73,9 +73,58 @@ export  const AuthProvider = ({ children }) => {
 
     const logout = () => setIsAuth(false)
 
+    const checkDuplicate = async (username, email) => {
+        try {
+            const existingUser= await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?username=' + username);
+            // const existingUsers = await existingUser.json();
+            const existingEmail = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?email=' + email);
+            // const existingEmails = await existingEmail.json();
+            const [userRes, emailRes] = await Promise.all([existingUser, existingEmail]);
+            const existingUsers = await userRes.json();
+            const existingEmails = await emailRes.json();
+            if (existingUsers.length > 0) {
+                alert('El nombre de usuario ya está en uso');
+                return;
+            }
+            if (existingEmails.length > 0) {
+                alert('El email ya está en uso');
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error al verificar duplicados');
+        }
+        return true;
+    }
+
+    const register = async (username, email, password) => {
+        try{
+            const isUnique = await checkDuplicate(username, email);
+            if (!isUnique) return;
+
+            const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, password})
+            });
+            const newUser = await response.json();
+
+            await AsyncStorage.setItem('isAuthenticated', 'true');
+            await AsyncStorage.setItem('userData', JSON.stringify(newUser));
+            setUser(newUser);
+            setIsAuth(true);
+            setStatus('authenticated');
+        } catch (error) {
+            console.error(error);
+            alert('Error al registrar el usuario');
+            setStatus('unauthenticated');
+        }
+    }
 
     return (
-        <AuthContext.Provider value={{isAuth,login,logout}}>
+        <AuthContext.Provider value={{isAuth,login, logout, register}}>
             {children}
         </AuthContext.Provider>
     )

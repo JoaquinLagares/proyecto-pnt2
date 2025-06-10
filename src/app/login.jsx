@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import { useAuth } from '../context/AuthContext';  
 
 export default function LoginScreen() {
-  const { login } = useAuth();
+  const { login, register } = useAuth();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -40,10 +40,15 @@ export default function LoginScreen() {
           value={password}
           onChangeText={setPassword}
         />
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity style={styles.button} onPress={() => login(username,password)}>
+            <Text style={styles.buttonText}>Entrar</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => login(username,password)}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => register(username,email,password)}>
+            <Text style={styles.buttonText}>Signup</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -51,60 +56,67 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#121417', // un poco más claro que el original, oscuro pero no negro total
+    backgroundColor: '#0e0e11', // fondo más oscuro, bien gamer
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
   card: {
-    backgroundColor: '#252a38', // azul oscuro apagado, estilo panel gamer
+    backgroundColor: '#1a1f2e',
     borderRadius: 20,
     padding: 30,
-    shadowColor: '#0ff', // sombra neón cyan
-    shadowOpacity: 0.7,
-    shadowOffset: { width: 0, height: 8 },
-    shadowRadius: 15,
-    elevation: 15,
+    shadowColor: '#0ff',
+    shadowOpacity: 0.5,
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 20,
+    elevation: 12,
     borderWidth: 1,
-    borderColor: '#0ff', // borde neón cyan para el estilo gamer
+    borderColor: '#11BD93',
   },
   title: {
-    fontSize: 30,
-    fontWeight: '700',
-    color: '#0ff', // texto neón cyan
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#11BD93',
     marginBottom: 30,
     textAlign: 'center',
-    textShadowColor: '#00f', // sombra azul para dar brillo
+    textShadowColor: '#11BD93',
     textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
+    textShadowRadius: 8,
+    letterSpacing: 1.2,
   },
   input: {
-    backgroundColor: '#1c2233', // fondo input azul oscuro
+    backgroundColor: '#11BD93',
     padding: 14,
-    borderRadius: 12,
-    color: '#0ff', // texto neón cyan
+    borderRadius: 10,
+    color: '#0ff',
     marginBottom: 20,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#0ff', // borde neón cyan para input
+    borderColor: '#0ff',
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
   },
   button: {
-    backgroundColor: '#00f0ff', // botón neón cyan vibrante
-    padding: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10,
-    shadowColor: '#00f0ff',
+    backgroundColor: '#11BD93',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    marginHorizontal: 5, // espaciado entre botones
+    shadowColor: '#11BD93',
     shadowOpacity: 0.8,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 10,
-    elevation: 12,
-  },
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 10,
+},
   buttonText: {
-    color: '#121417', // texto oscuro para contraste en botón claro
+    color: '#0e0e11',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
     textShadowColor: '#000',
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
+    textShadowRadius: 1,
   },
 });
