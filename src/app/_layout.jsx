@@ -19,7 +19,7 @@ function ProtectedLayout() {
         if (!isAuth && !inAuthGroup) {
             router.replace('/login')
         } else if (isAuth && inAuthGroup) {
-            router.replace('/')
+            router.replace('/perfil')
         }
 
         console.log("segments: ", segments)

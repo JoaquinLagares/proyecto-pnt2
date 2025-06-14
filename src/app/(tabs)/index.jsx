@@ -2,32 +2,32 @@
 // // import { Link } from 'expo-router'
 // // import { Text,View, StyleSheet, Pressable} from 'react-native'
 
-// // export default function Home() {
+export default function Home() {
 
-// //   const links = [ 
-// //     {href: '/scroll', label: 'Ir a ScrollUrers'},
-// //     {href: '/flatlist', label: 'Ir a FlatListUrers'},
-// //     {href: '/touchables', label: 'Ir a Touchables'},
-// //     {href: '/demo', label: 'Ir a Demo'}
-// //   ]
+  const links = [ 
+    {href: '/scroll', label: 'Ir a ScrollUrers'},
+    {href: '/flatlist', label: 'Ir a FlatListUrers'},
+    {href: '/touchables', label: 'Ir a Touchables'},
+    {href: '/demo', label: 'Ir a Demo'}
+  ]
 
 
-// //   return (
+  return (
     
-// //     <View style= {styles.container}>
-// //       <Text style = {styles.title}>🏠Home Screen</Text>
-// //       {
-// //         links.map((link)=>(
-// //           <Link key={link.href} href={link.href} asChild> 
-// //                 <Pressable style ={styles.button}>
-// //                   <Text style={styles.buttonText}>{link.label}</Text>
-// //                 </Pressable>
-// //           </Link>
-// //         ))
-// //       }
-// //     </View>
-// //   )
-// // }
+    <View style= {styles.container}>
+      <Text style = {styles.title}>🏠Home Screen</Text>
+      {
+        links.map((link)=>(
+          <Link key={link.href} href={link.href} asChild> 
+                <Pressable style ={styles.button}>
+                  <Text style={styles.buttonText}>{link.label}</Text>
+                </Pressable>
+          </Link>
+        ))
+      }
+    </View>
+  )
+}
 
 // // const styles = StyleSheet.create  ({
 // //   container: {

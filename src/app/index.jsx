@@ -19,38 +19,12 @@ export default function PerfilGamer() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Perfil */}
-      <View style={styles.profile}>
-        <Image source={user.imagen} style={styles.avatar} />
-        <Text style={styles.username}>{user.nombre}</Text>
-        <Text style={styles.region}>Region: {user.region || 'Sin región'}</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Steam Profile</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Partidas */}
-      <View style={styles.matchesContainer}>
-        <Text style={styles.title}>Recent Matches</Text>
-        <FlatList
-          data={partidas}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.matchCard}>
-              <Image source={item.icon} style={styles.icon} />
-              <View>
-                <Text style={[styles.result, item.resultado === 'VICTORY' ? styles.victory : styles.defeat]}>
-                  {item.resultado}
-                </Text>
-                <Text style={styles.modo}>{item.modo}</Text>
-                <Text style={styles.score}>{item.score}</Text>
-                <Text style={styles.tiempo}>{item.tiempo}</Text>
-              </View>
-            </View> 
-          )}
-        />
-      </View>
+    <View>
+        <Text> Pagina principal</Text>
+        <Link href={'/(tabs)'} asChild> 
+          <Button title= 'Ir a tabs'>a
+          </Button> 
+        </Link>
     </View>
   );
 }
