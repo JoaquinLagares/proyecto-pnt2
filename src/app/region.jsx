@@ -36,8 +36,9 @@ export default function RegionSelectScreen() {
 
       <TouchableOpacity
         style={[styles.confirmButton, !selectedRegion && styles.disabled]}
-        onPress={handleSelect && console.log('Registro exitoso, navegando a /region')}
+        onPress={handleSelect }
         disabled={!selectedRegion}   
+
       > 
         <Text style={styles.confirmText}>Confirmar</Text>
       </TouchableOpacity>
