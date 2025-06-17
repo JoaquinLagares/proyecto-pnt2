@@ -123,7 +123,7 @@ export  const AuthProvider = ({ children }) => {
         return true;
     }
 
-    const register = async (username, email, password, confirmPassword) => {
+    const register = async (username, email, password, confirmPassword, onSuccess) => {
         try{
             const isUnique = await checkDuplicate(username, email);
             if (!isUnique) return;
@@ -136,15 +136,22 @@ export  const AuthProvider = ({ children }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, email, password})
+                body: JSON.stringify({ username, email, password, region:'Indefinida'})
             });
             const newUser = await response.json();
 
             await AsyncStorage.setItem('isAuthenticated', 'true');
             await AsyncStorage.setItem('userData', JSON.stringify(newUser));
             setUser(newUser);
-            setIsAuth(true);
-            setStatus('authenticated');
+            //setIsAuth(true);   
+            //setStatus('authenticated');
+
+            if (onSuccess) {
+            console.log('Registro exitoso, navegando a /region');
+            onSuccess();
+}
+
+
         } catch (error) {
             console.error(error);
             alert('Error al registrar el usuario');
@@ -152,8 +159,28 @@ export  const AuthProvider = ({ children }) => {
         }
     }
 
+    const updateUserRegion = async (userId, region) => {
+        try {
+            const response = await fetch(`https://683fa1935b39a8039a552628.mockapi.io/api/v1/users/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ region })
+            });
+
+            const updatedUser = await response.json();
+            await AsyncStorage.setItem('userData', JSON.stringify(updatedUser));
+            setUser(updatedUser);
+            return updatedUser;
+        } catch (error) {
+            console.error('Error al actualizar región:', error);
+            alert('No se pudo actualizar la región');
+        }
+        setIsAuth(true);   
+        setStatus('authenticated');
+    };
+
     return (
-        <AuthContext.Provider value={{isAuth,login, logout, register}}>
+        <AuthContext.Provider value={{isAuth,login, logout, register, updateUserRegion}}>
             {children}
         </AuthContext.Provider>
     )

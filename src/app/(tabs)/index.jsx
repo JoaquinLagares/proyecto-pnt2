@@ -8,7 +8,8 @@ export default function Home() {
     {href: '/scroll', label: 'Ir a ScrollUrers'},
     {href: '/flatlist', label: 'Ir a FlatListUrers'},
     {href: '/touchables', label: 'Ir a Touchables'},
-    {href: '/demo', label: 'Ir a Demo'}
+    {href: '/demo', label: 'Ir a Demo'},
+    {href: './region', label: 'Ir a region'}
   ]
 
 

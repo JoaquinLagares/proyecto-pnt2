@@ -52,7 +52,7 @@ export default function RegisterScreen() {
                     onChangeText={setConfirmPassword}
                 />
                 <View style={styles.buttonGroup}>
-                    <TouchableOpacity style={styles.button} onPress={() => register(username, email, password, confirmPassword)}>
+                    <TouchableOpacity style={styles.button} onPress={() => register(username, email, password, confirmPassword,() => router.push('/region'))}>
                         <Text style={styles.buttonText}>Registrar</Text>
                     </TouchableOpacity>
                 </View>
