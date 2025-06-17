@@ -1,28 +1,22 @@
 
 import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity,Button } from 'react-native';
+import { Link } from 'expo-router';
 import lolIcon from '../assets/lol.png';
 
 
-const partidas = [
-  { id: '1', juego: 'League of Legends', resultado: 'VICTORY', score: '3:9/5', modo: 'Normal', tiempo: '28 min ago', icon: require('../assets/lol.png') },
-  { id: '2', juego: 'League of Legends', resultado: 'DEFEAT', score: '28:34', modo: 'Champion', tiempo: '34 min ago', icon: require('../assets/lol.png') },
-  { id: '3', juego: 'CS:GO', resultado: 'DEFEAT', score: '16:24', modo: 'Crimpor', tiempo: '28 min ago', icon: require('../assets/csgo.png') },
-  { id: '4', juego: 'Valorant', resultado: 'DEFEAT', score: '15:25', modo: 'VALORANT', tiempo: '28 min ago', icon: require('../assets/valorant.png') },
-];
+
 
 export default function PerfilGamer() {
-  const user = {
-    nombre: 'Gamer123',
-    region: 'NA',
-    imagen: require('../assets/avatar.png'),
-  };
+
 
   return (
     <View>
         <Text> Pagina principal</Text>
-        <Link href={'/(tabs)'} asChild> 
-          <Button title= 'Ir a tabs'>a
+
+        
+        <Link href={'/perfil'} asChild> 
+          <Button title= 'Ir a tabs'>
           </Button> 
         </Link>
     </View>

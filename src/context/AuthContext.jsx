@@ -44,32 +44,32 @@ export  const AuthProvider = ({ children }) => {
         checkAuth()
 
     },[])
+    
+    const login= () => setIsAuth(true)
+    // const login = async (usuario, password) => {
+    //     try{
+    //         const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users')
+    //         const data = await response.json()
+    //         // console.log(data)
 
-    // const login= () => setIsAuth(true)
-    const login = async (usuario, password) => {
-        try{
-            const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users')
-            const data = await response.json()
-            // console.log(data)
-
-            const user = data.find(u =>u.username === usuario && u.password === password )
-            // console.log(user)
-            if(user){
-                await AsyncStorage.setItem('isAuthenticated','true')
-                await AsyncStorage.setItem('userData', JSON.stringify(user))
-                setUser(user)
-                setIsAuth(true)
-                setStatus('authenticated')
-            }else{
-                alert('Usuario o pasword incorrecto')
-            setStatus('unauthenticated')
-            }
-        }catch (error){
-            console.error(error)
-            alert('error en la autenticacion')
-            setStatus('unauthenticated')
-        }
-    }
+    //         const user = data.find(u =>u.username === usuario && u.password === password )
+    //         // console.log(user)
+    //         if(user){
+    //             await AsyncStorage.setItem('isAuthenticated','true')
+    //             await AsyncStorage.setItem('userData', JSON.stringify(user))
+    //             setUser(user)
+    //             setIsAuth(true)
+    //             setStatus('authenticated')
+    //         }else{
+    //             alert('Usuario o pasword incorrecto')
+    //         setStatus('unauthenticated')
+    //         }
+    //     }catch (error){
+    //         console.error(error)
+    //         alert('error en la autenticacion')
+    //         setStatus('unauthenticated')
+    //     }
+    // }
 
     const logout = () => setIsAuth(false)
 

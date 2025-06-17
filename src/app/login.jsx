@@ -26,13 +26,7 @@ export default function LoginScreen() {
           value={username}
           onChangeText={setUsername}
         />
-        {/* <TextInput
-          style={styles.input}
-          placeholder="Ingresa tu email"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
-        /> */}
+
 
         <TextInput
           style={styles.input}
