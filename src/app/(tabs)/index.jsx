@@ -4,12 +4,7 @@ import { Text,View, StyleSheet, Pressable} from 'react-native'
 
 // export default function Home() {
 
-//   const links = [ 
-//     {href: '/scroll', label: 'Ir a ScrollUrers'},
-//     {href: '/flatlist', label: 'Ir a FlatListUrers'},
-//     {href: '/touchables', label: 'Ir a Touchables'},
-//     {href: '/demo', label: 'Ir a Demo'}
-//   ]
+
 
 
 //   return (

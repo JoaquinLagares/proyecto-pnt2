@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, Button } from 'react-native';
 import { getMatches } from '../context/servicios';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router';
+
+const router = useRouter();
+
 
 export default function PerfilScreen() {
   const [summonerName, setSummonerName] = useState('');
@@ -14,7 +19,14 @@ export default function PerfilScreen() {
 
   return (
     <View style={styles.container}>
-      {}
+      {/* Ícono para ir a la vista de región */}
+      <View style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.regionIcon} onPress={() => router.push('/region')}>
+        <Ionicons  size={30} color="#11BD93" />
+      </TouchableOpacity>
+      </View>
+
+      {/* Buscador */}
       <TextInput
         style={styles.input}
         placeholder="Nombre de invocador"
@@ -33,7 +45,7 @@ export default function PerfilScreen() {
         <Text style={styles.buttonText}>Buscar partidas</Text>
       </TouchableOpacity>
 
-      {}
+      {/* Lista de partidas */}
       <FlatList
         data={matches}
         keyExtractor={(item) => item.matchId}
@@ -43,8 +55,12 @@ export default function PerfilScreen() {
               {item.win ? 'VICTORIA' : 'DERROTA'}
             </Text>
             <Text style={styles.detail}>{item.champion}</Text>
-            <Text style={styles.detail}>{item.kills}/{item.deaths}/{item.assists}</Text>
-            <Text style={styles.detail}>{item.mode} : {item.duration} min</Text>
+            <Text style={styles.detail}>
+              {item.kills}/{item.deaths}/{item.assists}
+            </Text>
+            <Text style={styles.detail}>
+              {item.mode} : {item.duration} min
+            </Text>
           </View>
         )}
       />
@@ -79,4 +95,40 @@ const styles = StyleSheet.create({
   },
   result: { fontWeight: 'bold', fontSize: 16 },
   detail: { color: '#ccc' },
+ regionIcon: {
+  position: 'absolute',
+  bottom: 24,
+  right: 24,
+  backgroundColor: '#1a1f2e',
+  padding: 12,
+  borderRadius: 30,
+  zIndex: 100, // Se asegura de estar por encima
+  elevation: 5, // Android shadow
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.3,
+  shadowRadius: 4,
+},regionIcon: {
+  position: 'absolute',
+  bottom: 24,
+  right: 24,
+  backgroundColor: '#1a1f2e',
+  padding: 12,
+  borderRadius: 30,
+  zIndex: 100, // Se asegura de estar por encima
+  elevation: 5, // Android shadow
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.3,
+  shadowRadius: 4,
+},
+buttonContainer: {
+  flex: 1,
+  backgroundColor: '#0e0e11',
+  padding: 16,
+  position: 'relative',
+},
+
+
+
 });

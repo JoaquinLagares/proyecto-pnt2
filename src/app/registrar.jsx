@@ -10,6 +10,7 @@ export default function RegisterScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    //const [confirmRegion, setConfirmRegion] = useState('')
     const router = useRouter();
 
     return (
@@ -51,8 +52,9 @@ export default function RegisterScreen() {
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                 />
+            
                 <View style={styles.buttonGroup}>
-                    <TouchableOpacity style={styles.button} onPress={() => register(username, email, password, confirmPassword)}>
+                    <TouchableOpacity style={styles.button} onPress={() => register(username, email, password, confirmPassword,() => router.push('/region'))}>
                         <Text style={styles.buttonText}>Registrar</Text>
                     </TouchableOpacity>
                 </View>

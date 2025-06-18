@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <View>
         <Text> Pagina principal</Text>
-        <Link href={'/perfil)'} asChild> 
+        <Link href={'./perfil'} asChild> 
           <Button title= 'Ir a tabs'>
           </Button> 
         </Link>
