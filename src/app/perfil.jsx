@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 
 export default function PerfilScreen() {
+  const router = useRouter();
   const { user } = useAuth();
   // console.log("User cargado desde contexto:", user);
   const [partidas, setPartidas] = useState();
@@ -37,7 +38,10 @@ export default function PerfilScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ flex: 1 }} />
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => router.push("/editarPerfil")}
+        >
           <Text style={styles.editButtonText}>Editar</Text>
         </TouchableOpacity>
       </View>
