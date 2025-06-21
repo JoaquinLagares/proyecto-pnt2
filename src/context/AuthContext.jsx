@@ -11,62 +11,66 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [status, setStatus] = useState("cheking");
 
-    //use effect: maneja los ciclos de vida de los componentes, cuando se monta, cuando se modifica una dependencia, cuando se demonta
-    useEffect(() => {
+  //use effect: maneja los ciclos de vida de los componentes, cuando se monta, cuando se modifica una dependencia, cuando se demonta
+  useEffect(() => {
+    const cargarEstadoAuth = async () => {
+      const isAuthenticated = await AsyncStorage.getItem("isAuthenticated");
+      const userData = await AsyncStorage.getItem("userData");
 
-        const cargarEstadoAuth = async() => {
+      if (isAuthenticated === "true" && userData) {
+        setUser(JSON.parse(userData));
+        setIsAuth(true);
+        setStatus("authenticated");
+      } else {
+        setStatus("unauthenticated");
+      }
+    };
+    cargarEstadoAuth();
+  }, []);
 
-            const isAuthenticated = await AsyncStorage.getItem("isAuthenticated");
-            const userData = await AsyncStorage.getItem('userData')
+  useEffect(() => {
+    const checkAuth = async () => {
+      const logged = false;
+      setIsAuth(logged);
+    };
+    checkAuth();
+  }, []);
 
-            if(isAuthenticated === 'true' && userData){
-                setUser(JSON.parse(userData))
-                setStatus('authenticated')
-            }  else{
-                setStatus('unauthenticated')
-            }
+  //    const login= () => setIsAuth(true)
+  const login = async (usuario, password) => {
+    try {
+      const response = await fetch(
+        "https://683fa1935b39a8039a552628.mockapi.io/api/v1/users"
+      );
+      const data = await response.json();
 
-        }
-        cargarEstadoAuth()
-    },[])
+      const user = data.find(
+        (u) => u.username === usuario && u.password === password
+      );
+      if (user) {
+        await AsyncStorage.setItem("isAuthenticated", "true");
+        await AsyncStorage.setItem("userData", JSON.stringify(user));
+        setUser(user);
+        setIsAuth(true);
+        setStatus("authenticated");
+      } else {
+        alert("Usuario o pasword incorrecto");
+        setStatus("unauthenticated");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("error en la autenticacion");
+      setStatus("unauthenticated");
+    }
+  };
 
-
-    useEffect(() =>{
-        const checkAuth = async () => {
-            const logged = false;
-            setIsAuth(logged)
-        }
-        checkAuth()
-
-    },[])
-
-   const login= () => setIsAuth(true)
-    // const login = async (usuario, password) => {
-    //     try{
-    //         const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users')
-    //         const data = await response.json()
-    //         // console.log(data)
-
-    //         const user = data.find(u =>u.username === usuario && u.password === password )
-    //         // console.log(user)
-    //         if(user){
-    //             await AsyncStorage.setItem('isAuthenticated','true')
-    //             await AsyncStorage.setItem('userData', JSON.stringify(user))
-    //             setUser(user)
-    //             setIsAuth(true)
-    //             setStatus('authenticated')
-    //         }else{
-    //             alert('Usuario o pasword incorrecto')
-    //         setStatus('unauthenticated')
-    //         }
-    //     }catch (error){
-    //         console.error(error)
-    //         alert('error en la autenticacion')
-    //         setStatus('unauthenticated')
-    //     }
-    // }
-
-    const logout = () => setIsAuth(false)
+  const logout = async () => {
+    await AsyncStorage.removeItem("isAuthenticated");
+    await AsyncStorage.removeItem("userData");
+    setIsAuth(false);
+    setUser(null);
+    setStatus("unauthenticated");
+  };
 
   const checkPassword = async (password, confirmPassword) => {
     try {
@@ -86,41 +90,56 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-    const checkDuplicate = async (username, email) => {
-        try {
-            const existingUser= await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?username=' + username);
-            const existingEmail = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?email=' + email);
-            const [userRes, emailRes] = await Promise.all([existingUser, existingEmail]);
-            let existingUsers = await userRes.json();
-            let existingEmails = await emailRes.json();
-            
-            if (existingUsers === 'Not found') {
-                existingUsers = ''
-            }
-            if (existingEmails === 'Not found') {
-                existingEmails = ''
-            }
-            console.log(existingUsers,existingEmails);
-            
-            if (existingUsers.length > 0) {
-                console.log("Ya existe usuario");
-                return;
-            }
-            if (existingEmails.length > 0) {
-                console.log("Ya existe email");
-                return;
-            }
-        } catch (error) {
-            console.error(error);
-            alert('Error al verificar duplicados');
-        }
-        return true;
-    }
+  const checkDuplicate = async (username, email) => {
+    try {
+      const existingUser = await fetch(
+        "https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?username=" +
+          username
+      );
+      const existingEmail = await fetch(
+        "https://683fa1935b39a8039a552628.mockapi.io/api/v1/users?email=" +
+          email
+      );
+      const [userRes, emailRes] = await Promise.all([
+        existingUser,
+        existingEmail,
+      ]);
+      let existingUsers = await userRes.json();
+      let existingEmails = await emailRes.json();
 
-    const register = async (username, email, password, confirmPassword, onSuccess) => {
-        try{
-            const isUnique = await checkDuplicate(username, email);
-            if (!isUnique) return;
+      if (existingUsers === "Not found") {
+        existingUsers = "";
+      }
+      if (existingEmails === "Not found") {
+        existingEmails = "";
+      }
+      console.log(existingUsers, existingEmails);
+
+      if (existingUsers.length > 0) {
+        console.log("Ya existe usuario");
+        return;
+      }
+      if (existingEmails.length > 0) {
+        console.log("Ya existe email");
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error al verificar duplicados");
+    }
+    return true;
+  };
+
+  const register = async (
+    username,
+    email,
+    password,
+    confirmPassword,
+    onSuccess
+  ) => {
+    try {
+      const isUnique = await checkDuplicate(username, email);
+      if (!isUnique) return;
 
       const passOkay = await checkPassword(password, confirmPassword);
       if (!passOkay) return;
