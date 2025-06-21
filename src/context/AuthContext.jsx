@@ -116,11 +116,11 @@ export const AuthProvider = ({ children }) => {
       console.log(existingUsers, existingEmails);
 
       if (existingUsers.length > 0) {
-        console.log("Ya existe usuario");
+        alert("Este nombre de usuario ya esta tomado");
         return;
       }
       if (existingEmails.length > 0) {
-        console.log("Ya existe email");
+        alert("Este mail ya tiene una cuenta asociada");
         return;
       }
     } catch (error) {
@@ -210,8 +210,8 @@ export const AuthProvider = ({ children }) => {
         setUser,
         status,
         setStatus,
-        login, // tu función de login
-        logout, // opcional: agregar si querés cerrar sesión
+        login, 
+        logout, 
       }}
     >
       {status === "checking" ? null : children}
