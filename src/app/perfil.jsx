@@ -87,7 +87,7 @@ export default function PerfilGamer() {
 
       <View style={styles.header}>
         <View style={{ flex: 1 }} /> 
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity style={styles.editButton} onPress={() => router.push('/editarPerfil')}>
           <Text style={styles.editButtonText}>Editar</Text>
         </TouchableOpacity>
       </View>
