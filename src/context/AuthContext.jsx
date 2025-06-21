@@ -1,20 +1,15 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //contexto: funcion global que exporta funciones a otras partes de la app
 const AuthContext = createContext();
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);
 
-
-export  const AuthProvider = ({ children }) => {
-
-    const [isAuth, setIsAuth] = useState(null)
-    const [user, setUser] = useState(null)
-    const [status, setStatus] = useState('cheking')
+export const AuthProvider = ({ children }) => {
+  const [isAuth, setIsAuth] = useState(null);
+  const [user, setUser] = useState(null);
+  const [status, setStatus] = useState("cheking");
 
     //use effect: maneja los ciclos de vida de los componentes, cuando se monta, cuando se modifica una dependencia, cuando se demonta
     useEffect(() => {
@@ -45,52 +40,51 @@ export  const AuthProvider = ({ children }) => {
 
     },[])
 
-   //const login= () => setIsAuth(true)
-    const login = async (usuario, password) => {
-        try{
-            const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users')
-            const data = await response.json()
-            // console.log(data)
+   const login= () => setIsAuth(true)
+    // const login = async (usuario, password) => {
+    //     try{
+    //         const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users')
+    //         const data = await response.json()
+    //         // console.log(data)
 
-            const user = data.find(u =>u.username === usuario && u.password === password )
-            // console.log(user)
-            if(user){
-                await AsyncStorage.setItem('isAuthenticated','true')
-                await AsyncStorage.setItem('userData', JSON.stringify(user))
-                setUser(user)
-                setIsAuth(true)
-                setStatus('authenticated')
-            }else{
-                alert('Usuario o pasword incorrecto')
-            setStatus('unauthenticated')
-            }
-        }catch (error){
-            console.error(error)
-            alert('error en la autenticacion')
-            setStatus('unauthenticated')
-        }
-    }
+    //         const user = data.find(u =>u.username === usuario && u.password === password )
+    //         // console.log(user)
+    //         if(user){
+    //             await AsyncStorage.setItem('isAuthenticated','true')
+    //             await AsyncStorage.setItem('userData', JSON.stringify(user))
+    //             setUser(user)
+    //             setIsAuth(true)
+    //             setStatus('authenticated')
+    //         }else{
+    //             alert('Usuario o pasword incorrecto')
+    //         setStatus('unauthenticated')
+    //         }
+    //     }catch (error){
+    //         console.error(error)
+    //         alert('error en la autenticacion')
+    //         setStatus('unauthenticated')
+    //     }
+    // }
 
     const logout = () => setIsAuth(false)
 
-    const checkPassword = async (password, confirmPassword) => {
-        try {
-            if (password !== confirmPassword) {
-                alert('Las contraseñas no coinciden');
-                return false;
-            }
-            if (password.length < 6) {
-                alert('La contraseña debe tener al menos 6 caracteres');
-                return false;
-            }
-            return true;
-            }
-        catch (error) {
-            console.error(error);
-            alert('Error al verificar la contraseña');
-            return false;
-        }
+  const checkPassword = async (password, confirmPassword) => {
+    try {
+      if (password !== confirmPassword) {
+        alert("Las contraseñas no coinciden");
+        return false;
+      }
+      if (password.length < 6) {
+        alert("La contraseña debe tener al menos 6 caracteres");
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error(error);
+      alert("Error al verificar la contraseña");
+      return false;
     }
+  };
 
     const checkDuplicate = async (username, email) => {
         try {
@@ -109,11 +103,11 @@ export  const AuthProvider = ({ children }) => {
             console.log(existingUsers,existingEmails);
             
             if (existingUsers.length > 0) {
-                alert("Ya existe usuario con este tag");
+                console.log("Ya existe usuario");
                 return;
             }
             if (existingEmails.length > 0) {
-                alert("Este mail ya está asociado con una cuenta");
+                console.log("Ya existe email");
                 return;
             }
         } catch (error) {
@@ -128,61 +122,80 @@ export  const AuthProvider = ({ children }) => {
             const isUnique = await checkDuplicate(username, email);
             if (!isUnique) return;
 
-            const passOkay = await checkPassword(password, confirmPassword);
-            if (!passOkay) return;
+      const passOkay = await checkPassword(password, confirmPassword);
+      if (!passOkay) return;
 
-            const response = await fetch('https://683fa1935b39a8039a552628.mockapi.io/api/v1/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, email, password, region:'Indefinida'})
-            });
-            const newUser = await response.json();
-
-            await AsyncStorage.setItem('isAuthenticated', 'true');
-            await AsyncStorage.setItem('userData', JSON.stringify(newUser));
-            setUser(newUser);
-            //setIsAuth(true);   
-            //setStatus('authenticated');
-
-            if (onSuccess) {
-            console.log('Registro exitoso, navegando a /region');
-            onSuccess();
-}
-
-
-        } catch (error) {
-            console.error(error);
-            alert('Error al registrar el usuario');
-            setStatus('unauthenticated');
+      const response = await fetch(
+        "https://683fa1935b39a8039a552628.mockapi.io/api/v1/users",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+            region: "Indefinida",
+          }),
         }
-        setIsAuth(true);   
-        setStatus('authenticated');
+      );
+      const newUser = await response.json();
+
+      await AsyncStorage.setItem("isAuthenticated", "true");
+      await AsyncStorage.setItem("userData", JSON.stringify(newUser));
+      setUser(newUser);
+      //setIsAuth(true);
+      //setStatus('authenticated');
+
+      if (onSuccess) {
+        console.log("Registro exitoso, navegando a /region");
+        onSuccess();
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error al registrar el usuario");
+      setStatus("unauthenticated");
     }
+    setIsAuth(true);
+    setStatus("authenticated");
+  };
 
-    const updateUserRegion = async (userId, region) => {
-        try {
-            const response = await fetch(`https://683fa1935b39a8039a552628.mockapi.io/api/v1/users/${userId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ region })
-            });
-
-            const updatedUser = await response.json();
-            await AsyncStorage.setItem('userData', JSON.stringify(updatedUser));
-            setUser(updatedUser);
-            return updatedUser;
-        } catch (error) {
-            console.error('Error al actualizar región:', error);
-            alert('No se pudo actualizar la región');
+  const updateUserRegion = async (userId, region) => {
+    try {
+      const response = await fetch(
+        `https://683fa1935b39a8039a552628.mockapi.io/api/v1/users/${userId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ region }),
         }
-       
-    };
+      );
 
-    return (
-        <AuthContext.Provider value={{isAuth,login, logout, register, updateUserRegion, user}}>
-            {children}
-        </AuthContext.Provider>
-    )
-} 
+      const updatedUser = await response.json();
+      await AsyncStorage.setItem("userData", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error("Error al actualizar región:", error);
+      alert("No se pudo actualizar la región");
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuth,
+        setIsAuth,
+        user,
+        setUser,
+        status,
+        setStatus,
+        login, // tu función de login
+        logout, // opcional: agregar si querés cerrar sesión
+      }}
+    >
+      {status === "checking" ? null : children}
+    </AuthContext.Provider>
+  );
+};
