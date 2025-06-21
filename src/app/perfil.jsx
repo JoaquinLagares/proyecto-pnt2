@@ -26,6 +26,11 @@ export default function PerfilScreen() {
       </TouchableOpacity>
       </View>
 
+
+      <TouchableOpacity message="buscar jugador" style={styles.regionIcon} onPress={() => router.push('/buscadorUsuarios')}>
+        <Ionicons size={30} color="#11BD93" />
+      </TouchableOpacity>
+
       {/* Buscador */}
       <TextInput
         style={styles.input}
