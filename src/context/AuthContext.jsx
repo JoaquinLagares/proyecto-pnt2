@@ -231,6 +231,7 @@ export const AuthProvider = ({ children }) => {
         setStatus,
         login, // tu función de login
         logout, // opcional: agregar si querés cerrar sesión
+        refreshUser,
       }}
     >
       {status === "checking" ? null : children}

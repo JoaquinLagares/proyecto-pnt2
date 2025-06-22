@@ -9,12 +9,13 @@ import {
   StyleSheet,
   View,
   ScrollView,
+  Alert,
 } from "react-native";
 
 export default function EditarPerfil() {
   const router = useRouter();
 
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -59,6 +60,37 @@ export default function EditarPerfil() {
       alert("Hubo un error al guardar los cambios");
     }
   };
+
+  const handleEliminar = () => {
+    Alert.alert(
+      "Eliminar Cuenta?",
+      "Esta accion no se puede deshacer. Queres continuar?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Si, eliminar",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const res = await fetch(
+                `https://683fa1935b39a8039a552628.mockapi.io/api/v1/users/${user?.id}`,
+                { method: "DELETE" }
+              );
+              if (!res.ok) throw new Error("Fallo al eliminar la cuenta");
+
+              alert("Tu cuenta fue eliminada correctamente.");
+              await logout();
+              router.replace("/login");
+            } catch (err) {
+              console.error("Error al eliminar cuenta:", err);
+              alert("No se pudo eliminar la cuenta. Intenta mas tarde.");
+            }
+          },
+        },
+      ]
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -76,7 +108,7 @@ export default function EditarPerfil() {
           <Text style={styles.label}>{key}</Text>
 
           {key === "id" ? (
-            <Text style={styles.readOnlyText}>{value}</Text> // Solo se muestra, no se puede editar
+            <Text style={styles.readOnlyText}>{value}</Text>
           ) : (
             <TextInput
               style={styles.input}
@@ -91,6 +123,9 @@ export default function EditarPerfil() {
 
       <TouchableOpacity style={styles.button} onPress={handleGuardar}>
         <Text style={styles.buttonText}>Guardar cambios</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.deleteButton} onPress={handleEliminar}>
+        <Text style={styles.deleteButtonText}>Eliminar cuenta</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -147,5 +182,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     backgroundColor: "#1a1f2e",
     borderRadius: 8,
+  },
+  deleteButton: {
+    backgroundColor: "#ff4444",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 15,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });

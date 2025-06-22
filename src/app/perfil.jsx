@@ -16,7 +16,8 @@ import { useAuth } from "../context/AuthContext";
 
 export default function PerfilScreen() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
   // console.log("User cargado desde contexto:", user);
   const [partidas, setPartidas] = useState();
   const [loading, setLoading] = useState(true);
@@ -34,9 +35,27 @@ export default function PerfilScreen() {
     cargarPartidas();
   }, [user]);
 
+  if (!user) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#0e0e11",
+        }}
+      >
+        <Text style={{ color: "white" }}>Cargando perfil...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+          <Ionicons name="log-out-outline" size={20} color="white" />
+        </TouchableOpacity>
         <View style={{ flex: 1 }} />
         <TouchableOpacity
           style={styles.editButton}
@@ -193,5 +212,11 @@ const styles = StyleSheet.create({
   tiempo: {
     color: "#666",
     fontSize: 12,
+  },
+  logoutButton: {
+    backgroundColor: "#ff5555",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8,
   },
 });
