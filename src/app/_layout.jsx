@@ -14,13 +14,13 @@ function ProtectedLayout() {
 
         if (isAuth === null) return;
         
-        // const inAuthGroup = segments[0] ===s 'login'
+        // const inAuthGroup = segments[0] === 'login'
         const inAuthGroup = ['login', 'registrar'].includes(segments[0])
 
         if (!isAuth && !inAuthGroup) {
             router.replace('/login')
         } else if (isAuth && inAuthGroup) {
-            router.replace('/perfil')
+            router.replace('<div className=""></div>/home')
         }
 
         console.log("segments: ", segments)

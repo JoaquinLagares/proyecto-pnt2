@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "expo-router";
 import { Text, View, StyleSheet, Pressable } from "react-native";
-
+import {buscarUsuario} from "../buscadorUsuarios"
 const links = [
   { label: "Ir al perfil", href: "/perfil" },
   { label: "Buscar usuario", href: "/buscarUsuario" },
