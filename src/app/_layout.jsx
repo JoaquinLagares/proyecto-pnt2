@@ -1,5 +1,6 @@
 import { Stack, useSegments,useRouter} from 'expo-router'
 import { AuthProvider, useAuth } from '../context/AuthContext';
+import { UserProvider } from '../context/UserContext'; // 
 import  { useEffect} from 'react'
 
 function ProtectedLayout() {
@@ -36,7 +37,9 @@ export default function LayoutPrincipal() {
 
     return (
         <AuthProvider >
-            <ProtectedLayout />
+            <UserProvider>
+                <ProtectedLayout />
+            </UserProvider>
         </AuthProvider>
     )
 }
