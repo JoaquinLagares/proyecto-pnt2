@@ -18,6 +18,8 @@ export const AuthProvider = ({ children }) => {
       const userData = await AsyncStorage.getItem("userData");
 
       if (isAuthenticated === "true" && userData) {
+        // console.log("user is authenticated");
+        // await refreshUser();
         setUser(JSON.parse(userData));
         setIsAuth(true);
         setStatus("authenticated");
@@ -35,6 +37,23 @@ export const AuthProvider = ({ children }) => {
     };
     checkAuth();
   }, []);
+
+  const refreshUser = async () => {
+    try {
+      const stored = await AsyncStorage.getItem("userData");
+      if (!stored) return null;
+
+      const parsed = JSON.parse(stored);
+      const res = await fetch(`https://mockapi.io/api/v1/users/${parsed.id}`);
+      const fresh = await res.json();
+
+      await AsyncStorage.setItem("userData", JSON.stringify(fresh));
+      return fresh; // <- ahora retorna el usuario actualizado
+    } catch (error) {
+      console.error("Error al refrescar usuario:", error);
+      return null;
+    }
+  };
 
   //    const login= () => setIsAuth(true)
   const login = async (usuario, password) => {
@@ -212,6 +231,7 @@ export const AuthProvider = ({ children }) => {
         setStatus,
         login, // tu función de login
         logout, // opcional: agregar si querés cerrar sesión
+        refreshUser,
       }}
     >
       {status === "checking" ? null : children}
