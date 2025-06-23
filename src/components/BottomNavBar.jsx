@@ -14,7 +14,7 @@ export default function BottomNavBar() {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => router.push("/home")}>
+      <TouchableOpacity onPress={() => router.push("../home")}>
         <Image
           source={require("../../assets/home-button.png")}
           style={styles.icon}
