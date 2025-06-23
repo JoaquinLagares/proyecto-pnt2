@@ -1,6 +1,6 @@
 // src/app/index.jsx
 import { useEffect, useState } from "react";
-import { getMatches } from "../../context/servicios"; 
+import { getMatches } from "../context/servicios"; 
 import { FlatList, Text,TextInput, View,StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native";
 export default function Home() {
