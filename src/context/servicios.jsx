@@ -1,5 +1,5 @@
 // Servicio para encontrar cuenta de LOL
-const API_KEY = "RGAPI-de15bf39-ba06-4943-aa9e-6d2507526217";
+const API_KEY = "RGAPI-e8f4d6f4-f2e8-419f-a8c8-746abfb7d065";
 
 export const getMatches = async (summonerName, tagLine) => {
   try {

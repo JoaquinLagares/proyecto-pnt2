@@ -8,17 +8,18 @@ import {
   TouchableOpacity,
   Button,
   Image,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { getMatches } from "../context/servicios";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
+import BottomNavBar from "../components/BottomNavBar";
 
 export default function PerfilScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
-
-  // console.log("User cargado desde contexto:", user);
   const [partidas, setPartidas] = useState();
   const [loading, setLoading] = useState(true);
 
@@ -27,7 +28,7 @@ export default function PerfilScreen() {
       if (user?.perfilRiot && user?.tagLineRiot) {
         const resultados = await getMatches(user.perfilRiot, user.tagLineRiot);
         setPartidas(resultados);
-        console.log("Partidas recibidas:", resultados);
+        console.log("Buscando partidas");
       }
       setLoading(false);
     };
@@ -36,6 +37,7 @@ export default function PerfilScreen() {
   }, [user]);
 
   if (!user) {
+    console.log("No cargo user", user);
     return (
       <View
         style={{
@@ -51,69 +53,76 @@ export default function PerfilScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-          <Ionicons name="log-out-outline" size={20} color="white" />
-        </TouchableOpacity>
-        <View style={{ flex: 1 }} />
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => router.push("/editarPerfil")}
-        >
-          <Text style={styles.editButtonText}>Editar</Text>
-        </TouchableOpacity>
-      </View>
-      {/* Perfil */}
-      <View style={styles.profile}>
-        <Image source={user.imagen} style={styles.avatar} />
-        <Text style={styles.username}>{user.nombre}</Text>
-        <Text style={styles.region}>Region: {user.region || "Sin región"}</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Steam Profile</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+            <Ionicons name="log-out-outline" size={20} color="white" />
+          </TouchableOpacity>
+          <View style={{ flex: 1 }} />
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => router.push("/editarPerfil")}
+          >
+            <Text style={styles.editButtonText}>Editar</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* Partidas */}
-      <View style={styles.matchesContainer}>
-        <Text style={styles.title}>Recent Matches</Text>
-        {loading ? (
-          <Text style={{ color: "#aaa" }}>Cargando partidas...</Text>
-        ) : partidas.length > 0 ? (
-          <FlatList
-            data={partidas}
-            keyExtractor={(item) => item.matchId}
-            renderItem={({ item }) => (
-              <View style={styles.matchCard}>
-                {/* Ícono de campeón o logo general */}
-                <Image
-                  source={require("../../assets/lol-icon.png")}
-                  style={styles.icon}
-                />
+        {/* Perfil */}
+        <View style={styles.profile}>
+          <Image source={user.imagen} style={styles.avatar} />
+          <Text style={styles.username}>{user.nombre}</Text>
+          <Text style={styles.region}>
+            Region: {user.region || "Sin región"}
+          </Text>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Steam Profile</Text>
+          </TouchableOpacity>
+        </View>
 
-                <View>
-                  <Text
-                    style={[
-                      styles.result,
-                      item.win ? styles.victory : styles.defeat,
-                    ]}
-                  >
-                    {item.win ? "VICTORY" : "DEFEAT"}
-                  </Text>
-                  <Text style={styles.modo}>{item.mode}</Text>
-                  <Text style={styles.score}>
-                    {item.kills}/{item.deaths}/{item.assists} — {item.champion}
-                  </Text>
-                  <Text style={styles.tiempo}>{item.duration} min</Text>
+        {/* Partidas */}
+        <View style={styles.matchesContainer}>
+          <Text style={styles.title}>Recent Matches</Text>
+          {loading ? (
+            <Text style={{ color: "#aaa" }}>Cargando partidas...</Text>
+          ) : partidas.length > 0 ? (
+            <FlatList
+              data={partidas}
+              keyExtractor={(item) => item.matchId}
+              renderItem={({ item }) => (
+                <View style={styles.matchCard}>
+                  <Image
+                    source={require("../../assets/lol-icon.png")}
+                    style={styles.icon}
+                  />
+                  <View>
+                    <Text
+                      style={[
+                        styles.result,
+                        item.win ? styles.victory : styles.defeat,
+                      ]}
+                    >
+                      {item.win ? "VICTORY" : "DEFEAT"}
+                    </Text>
+                    <Text style={styles.modo}>{item.mode}</Text>
+                    <Text style={styles.score}>
+                      {item.kills}/{item.deaths}/{item.assists} —{" "}
+                      {item.champion}
+                    </Text>
+                    <Text style={styles.tiempo}>{item.duration} min</Text>
+                  </View>
                 </View>
-              </View>
-            )}
-          />
-        ) : (
-          <Text style={{ color: "#aaa" }}>No se encontraron partidas.</Text>
-        )}
+              )}
+            />
+          ) : (
+            <Text style={{ color: "#aaa" }}>No se encontraron partidas.</Text>
+          )}
+        </View>
       </View>
-    </View>
+
+      {/* Barra inferior fija */}
+      {/* <BottomNavBar /> */}
+    </SafeAreaView>
   );
 }
 
@@ -138,6 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0e0e11",
     padding: 20,
+    paddingBottom: 80,
   },
   profile: {
     alignItems: "center",

@@ -1,33 +1,37 @@
-import React from 'react'
-import {Tabs} from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
+import React from "react";
+import { Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { useAuth } from "../../context/AuthContext";
 
-export default function Tabslayout  () {
+export default function TabLayout() {
   return (
-    <Tabs>
-        <Tabs.Screen 
-        name="index" 
-        options={{
-            
-            title:"Home",
-            tabBarIcon: ({color, size})=>(
-                <Ionicons name='home-outline' color={color} size={size}></Ionicons>
-            ),
-                headerShown: false
-        
-            }}/>
-            <Tabs.Screen 
-        name="settings" 
-        options={{
-            title:"Settings",
-            tabBarIcon: ({color, size})=>(
-                <Ionicons name='settings-outline' color={color} size={size}></Ionicons>
-            ),
-                headerShown: false
-        
-            }}/>
-      
-
-    </Tabs>
-  )
+    <Tabs
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
+          let icon;
+          if (route.name === "index") {
+            icon = require("../../../assets/home-button.png");
+          } else if (route.name === "perfil") {
+            icon = require("../../../assets/profile-icon.png");
+          } else if (route.name === "buscadorUsuarios") {
+            icon = require("../../../assets/search-button.png");
+          }
+          return (
+            <Image
+              source={icon}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? "#11BD93" : "gray",
+              }}
+            />
+          );
+        },
+        tabBarStyle: {
+          backgroundColor: "#11BD93",
+        },
+        headerShown: false,
+      })}
+    />
+  );
 }
