@@ -1,19 +1,16 @@
-import React from 'react'
-import { Link } from 'expo-router'
-import { Text,View, StyleSheet, Pressable} from 'react-native'
+import React from "react";
+import { Link } from "expo-router";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 
 // export default function Home() {
 
-
-
-
 //   return (
-    
+
 //     <View style= {styles.container}>
 //       <Text style = {styles.title}>🏠Home Screen</Text>
 //       {
 //         links.map((link)=>(
-//           <Link key={link.href} href={link.href} asChild> 
+//           <Link key={link.href} href={link.href} asChild>
 //                 <Pressable style ={styles.button}>
 //                   <Text style={styles.buttonText}>{link.label}</Text>
 //                 </Pressable>
@@ -24,29 +21,28 @@ import { Text,View, StyleSheet, Pressable} from 'react-native'
 //   )
 // }
 
-const styles = StyleSheet.create  ({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems:'center',
+    justifyContent: "center",
+    alignItems: "center",
     padding: 20,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: "#f5f5f5",
   },
-  title:{
+  title: {
     fontSize: 26,
-    fontWeight: 'bold',
-    marginBottom:20
+    fontWeight: "bold",
+    marginBottom: 20,
   },
-  button:{
-    backgroundColor: '#2195f3',
+  button: {
+    backgroundColor: "#2195f3",
     paddingVertical: 12,
-    paddingHorizontal:25,
-    borderRadius:8,
-    marginBottom:15
-
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    marginBottom: 15,
   },
-  buttonText:{
-    color:'white',
-    fontSize:18
-  }
-})
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+  },
+});
