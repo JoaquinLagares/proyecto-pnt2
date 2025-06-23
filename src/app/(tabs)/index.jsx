@@ -2,24 +2,25 @@ import React from "react";
 import { Link } from "expo-router";
 import { Text, View, StyleSheet, Pressable } from "react-native";
 
-// export default function Home() {
+const links = [
+  { label: "Ir al perfil", href: "/perfil" },
+  { label: "Buscar usuario", href: "/buscarUsuario" },
+];
 
-//   return (
-
-//     <View style= {styles.container}>
-//       <Text style = {styles.title}>🏠Home Screen</Text>
-//       {
-//         links.map((link)=>(
-//           <Link key={link.href} href={link.href} asChild>
-//                 <Pressable style ={styles.button}>
-//                   <Text style={styles.buttonText}>{link.label}</Text>
-//                 </Pressable>
-//           </Link>
-//         ))
-//       }
-//     </View>
-//   )
-// }
+export default function Home() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>🏠 Home Screen</Text>
+      {links.map((link) => (
+        <Link key={link.href} href={link.href} asChild>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>{link.label}</Text>
+          </Pressable>
+        </Link>
+      ))}
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -27,22 +28,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#0e0e11",
   },
   title: {
     fontSize: 26,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "#11BD93",
   },
   button: {
-    backgroundColor: "#2195f3",
+    backgroundColor: "#11BD93",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
     marginBottom: 15,
   },
   buttonText: {
-    color: "white",
+    color: "#0e0e11",
     fontSize: 18,
   },
 });
