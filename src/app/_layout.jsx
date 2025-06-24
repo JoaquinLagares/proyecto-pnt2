@@ -34,7 +34,9 @@ export default function LayoutPrincipal() {
   return (
     <AuthProvider>
       <UserProvider>
-        <ProtectedLayout />
+        <PartidasProvider>
+          <ProtectedLayout />
+        </PartidasProvider>
       </UserProvider>
     </AuthProvider>
   );
