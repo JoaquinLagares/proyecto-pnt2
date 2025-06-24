@@ -9,7 +9,7 @@ export const PartidasProvider = ({ children }) => {
 
   const actualizarPartidas = async (perfil, tagLine) => {
     try {
-      const { getMatches } = await import("./servicios"); // Lazy import
+      const { getMatches } = await import("./servicios");
       const nuevasPartidas = await getMatches(perfil, tagLine);
       setPartidasCache(nuevasPartidas);
     } catch (error) {
@@ -18,9 +18,7 @@ export const PartidasProvider = ({ children }) => {
   };
 
   return (
-    <PartidasContext.Provider
-      value={{ partidasCache, actualizarPartidas }}
-    >
+    <PartidasContext.Provider value={{ partidasCache, actualizarPartidas }}>
       {children}
     </PartidasContext.Provider>
   );
