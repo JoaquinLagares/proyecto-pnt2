@@ -51,6 +51,8 @@ export default function PerfilScreen() {
     );
   }
 
+  const partidasValidas = partidasCache?.filter((p) => !!p.matchId);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -100,7 +102,7 @@ export default function PerfilScreen() {
           ) : partidasCache && partidasCache.length > 0 ? (
             <FlatList
               data={partidasCache}
-              keyExtractor={(item) => item.matchId}
+              keyExtractor={(item, index) => item.matchId || index.toString()}
               renderItem={({ item }) => (
                 <View style={styles.matchCard}>
                   <Image

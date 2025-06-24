@@ -1,12 +1,13 @@
 // Servicio para encontrar cuenta de LOL
 const API_KEY = "RGAPI-d0b2308f-b199-414c-b0fa-b801f70903cc";
 
-export const getMatches = async (summonerName, tagLine) => {
+export const getMatches = async (summonerName, tagLine, userId) => {
   try {
     const resAccount = await fetch(
       `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tagLine}?api_key=${API_KEY}`
     );
     const accountData = await resAccount.json();
+    console.log("Se encontro PUUID", accountData);
 
     if (!accountData.puuid) {
       console.error("No se encontro PUUID", accountData);
@@ -18,6 +19,7 @@ export const getMatches = async (summonerName, tagLine) => {
       `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=5&api_key=${API_KEY}`
     );
     const matchIds = await resMatchIds.json();
+    console.log("Se encontro MatchIds", matchIds);
 
     if (!Array.isArray(matchIds)) {
       console.error("matchIds no es un array", matchIds);
@@ -31,6 +33,7 @@ export const getMatches = async (summonerName, tagLine) => {
           `https://683fa1935b39a8039a552628.mockapi.io/api/v1/matches?matchId=${id}`
         );
         const existing = await existingMatch.json();
+        console.log("Se encontro match en mockAPI", existing);
 
         if (existing.length > 0) {
           return existing[0];
