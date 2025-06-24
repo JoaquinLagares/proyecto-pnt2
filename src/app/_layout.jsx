@@ -4,6 +4,7 @@ import { UserProvider } from "../context/UserContext";
 import { View } from "react-native";
 import BottomNavBar from "../components/BottomNavBar";
 import { useEffect } from "react";
+import { PartidasProvider } from "../context/PartidasContext";
 
 function ProtectedLayout() {
   const { isAuth } = useAuth();
