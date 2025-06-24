@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
       const fresh = await res.json();
 
       await AsyncStorage.setItem("userData", JSON.stringify(fresh));
-      return fresh; // <- ahora retorna el usuario actualizado
+      return fresh;
     } catch (error) {
       console.error("Error al refrescar usuario:", error);
       return null;
@@ -232,6 +232,7 @@ export const AuthProvider = ({ children }) => {
         login, // tu función de login
         logout, // opcional: agregar si querés cerrar sesión
         refreshUser,
+        register
       }}
     >
       {status === "checking" ? null : children}

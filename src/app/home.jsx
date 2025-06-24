@@ -1,26 +1,46 @@
 // src/app/index.jsx
 import { useEffect, useState } from "react";
-import { getMatches } from "../context/servicios"; 
-import { FlatList, Text,TextInput, View,StyleSheet } from "react-native";
+import { getMatches } from "../context/servicios";
+import { FlatList, Text, TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native";
+
+
+
 export default function Home() {
   const [jugadores, setJugadores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
 
+  const handleLike = async (id) => {
+    try {
+      await fetch(`https://683fa1935b39a8039a552628.mockapi.io/api/v1/users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          likes: ["like"],
+        }),
+      });
+      alert("¡Le diste like!");
+    } catch (error) {
+      console.error("Error al dar like:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchJugadores = async () => {
       try {
-        const res = await fetch("https://683fa1935b39a8039a552628.mockapi.io/api/v1/users"); 
+        const res = await fetch("https://683fa1935b39a8039a552628.mockapi.io/api/v1/users");
         const data = await res.json();
 
         const jugadoresConPartidas = await Promise.all(
-          data.map(async (jugador) => {
-            const partidas = await getMatches(
-              jugador.perfilRiot,
-              jugador.tagLineRiot
-            );
-            return { ...jugador, partidas };
+          data.slice(0, 5).map(async (jugador) => {
+            try {
+              const partidas = await getMatches(jugador.perfilRiot, jugador.tagLineRiot);
+              return { ...jugador, partidas };
+            } catch (e) {
+              console.error(`Error en jugador ${jugador.username}`, e);
+              return { ...jugador, partidas: [] };
+            }
           })
         );
 
@@ -37,7 +57,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      
+
       {loading ? (
         <ActivityIndicator size="large" color="#00f" />
       ) : (
@@ -79,14 +99,32 @@ export default function Home() {
               ) : (
                 <Text style={styles.text}>No se encontraron partidas.</Text>
               )}
+
+              <TouchableOpacity
+                style={{
+                  alignSelf: "flex-end",
+                  marginTop: 10,
+                  backgroundColor: "#333",
+                  padding: 8,
+                  borderRadius: 8,
+                }}
+                onPress={() => handleLike(item.id)}
+              >
+                <Text style={{ color: "#00ff88", fontWeight: "bold" }}>💚 Me gusta</Text>
+              </TouchableOpacity>
+              <Text style={{ color: "#888", marginTop: 5 }}>
+                Likes: {item.likes?.length || 0}
+              </Text>
             </View>
           )}
+
           ListEmptyComponent={<Text style={styles.text}>No se encontraron usuarios.</Text>}
         />
       )}
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: { padding: 20, flex: 1, backgroundColor: '#121212' },
   input: {
