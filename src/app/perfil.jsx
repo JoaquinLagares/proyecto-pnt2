@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#0e0e11",
     padding: 20,
-    paddingBottom: 80,
+    // paddingBottom: 80,
   },
   profile: {
     alignItems: "center",
