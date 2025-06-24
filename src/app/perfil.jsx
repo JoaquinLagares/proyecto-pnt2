@@ -26,14 +26,14 @@ export default function PerfilScreen() {
   const [loading, setLoading] = useState(!partidasCache);
 
   useEffect(() => {
-  if (!partidasCache && user?.perfilRiot && user?.tagLineRiot) {
-    actualizarPartidas(user.perfilRiot, user.tagLineRiot).finally(() =>
-      setLoading(false)
-    );
-  } else {
-    setLoading(false);
-  }
-}, [user]);
+    if (!partidasCache && user?.perfilRiot && user?.tagLineRiot) {
+      actualizarPartidas(user.perfilRiot, user.tagLineRiot).finally(() =>
+        setLoading(false)
+      );
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
   if (!user) {
     console.log("No cargo user", user);
@@ -80,11 +80,16 @@ export default function PerfilScreen() {
         </View>
 
         {/* Partidas */}
-        {/* actualizar las partidas*/} 
-        <TouchableOpacity style={styles.button} onPress={() => {
+        {/* actualizar las partidas*/}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
             setLoading(true);
             actualizarPartidas(user.perfilRiot, user.tagLineRiot).finally(() =>
-            setLoading(false));}}>
+              setLoading(false)
+            );
+          }}
+        >
           <Text style={styles.buttonText}>🔄 Actualizar</Text>
         </TouchableOpacity>
 
@@ -92,9 +97,9 @@ export default function PerfilScreen() {
           <Text style={styles.title}>Recent Matches</Text>
           {loading ? (
             <Text style={{ color: "#aaa" }}>Cargando partidas...</Text>
-          ) : partidas.length > 0 ? (
+          ) : partidasCache && partidasCache.length > 0 ? (
             <FlatList
-              data={partidas}
+              data={partidasCache}
               keyExtractor={(item) => item.matchId}
               renderItem={({ item }) => (
                 <View style={styles.matchCard}>
