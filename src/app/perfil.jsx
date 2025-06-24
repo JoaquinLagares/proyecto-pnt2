@@ -15,26 +15,25 @@ import { getMatches } from "../context/servicios";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
-import BottomNavBar from "../components/BottomNavBar";
+import { usePartidas } from "../context/PartidasContext";
 
 export default function PerfilScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const [partidas, setPartidas] = useState();
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  const { partidasCache, actualizarPartidas } = usePartidas();
+  const [loading, setLoading] = useState(!partidasCache);
 
   useEffect(() => {
-    const cargarPartidas = async () => {
-      if (user?.perfilRiot && user?.tagLineRiot) {
-        const resultados = await getMatches(user.perfilRiot, user.tagLineRiot);
-        setPartidas(resultados);
-        console.log("Buscando partidas");
-      }
-      setLoading(false);
-    };
-
-    cargarPartidas();
-  }, [user]);
+  if (!partidasCache && user?.perfilRiot && user?.tagLineRiot) {
+    actualizarPartidas(user.perfilRiot, user.tagLineRiot).finally(() =>
+      setLoading(false)
+    );
+  } else {
+    setLoading(false);
+  }
+}, [user]);
 
   if (!user) {
     console.log("No cargo user", user);
@@ -81,6 +80,14 @@ export default function PerfilScreen() {
         </View>
 
         {/* Partidas */}
+        {/* actualizar las partidas*/} 
+        <TouchableOpacity style={styles.button} onPress={() => {
+            setLoading(true);
+            actualizarPartidas(user.perfilRiot, user.tagLineRiot).finally(() =>
+            setLoading(false));}}>
+          <Text style={styles.buttonText}>🔄 Actualizar</Text>
+        </TouchableOpacity>
+
         <View style={styles.matchesContainer}>
           <Text style={styles.title}>Recent Matches</Text>
           {loading ? (
@@ -119,9 +126,6 @@ export default function PerfilScreen() {
           )}
         </View>
       </View>
-
-      {/* Barra inferior fija */}
-      {/* <BottomNavBar /> */}
     </SafeAreaView>
   );
 }
