@@ -1,5 +1,5 @@
 // Servicio para encontrar cuenta de LOL
-const API_KEY = "RGAPI-e8f4d6f4-f2e8-419f-a8c8-746abfb7d065";
+const API_KEY = "RGAPI-d0b2308f-b199-414c-b0fa-b801f70903cc";
 
 export const getMatches = async (summonerName, tagLine) => {
   try {
@@ -15,7 +15,7 @@ export const getMatches = async (summonerName, tagLine) => {
     const puuid = accountData.puuid;
 
     const resMatchIds = await fetch(
-      `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10&api_key=${API_KEY}`
+      `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=5&api_key=${API_KEY}`
     );
     const matchIds = await resMatchIds.json();
     if (!Array.isArray(matchIds)) {

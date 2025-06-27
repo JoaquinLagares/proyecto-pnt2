@@ -11,7 +11,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [status, setStatus] = useState("cheking");
 
-  //use effect: maneja los ciclos de vida de los componentes, cuando se monta, cuando se modifica una dependencia, cuando se demonta
   useEffect(() => {
     const cargarEstadoAuth = async () => {
       const isAuthenticated = await AsyncStorage.getItem("isAuthenticated");
@@ -48,7 +47,7 @@ export const AuthProvider = ({ children }) => {
       const fresh = await res.json();
 
       await AsyncStorage.setItem("userData", JSON.stringify(fresh));
-      return fresh; // <- ahora retorna el usuario actualizado
+      return fresh;
     } catch (error) {
       console.error("Error al refrescar usuario:", error);
       return null;
@@ -135,11 +134,11 @@ export const AuthProvider = ({ children }) => {
       console.log(existingUsers, existingEmails);
 
       if (existingUsers.length > 0) {
-        console.log("Ya existe usuario");
+        alert("Ya existe usuario");
         return;
       }
       if (existingEmails.length > 0) {
-        console.log("Ya existe email");
+        alert("Ya existe email");
         return;
       }
     } catch (error) {
@@ -183,11 +182,9 @@ export const AuthProvider = ({ children }) => {
       await AsyncStorage.setItem("isAuthenticated", "true");
       await AsyncStorage.setItem("userData", JSON.stringify(newUser));
       setUser(newUser);
-      //setIsAuth(true);
-      //setStatus('authenticated');
 
       if (onSuccess) {
-        console.log("Registro exitoso, navegando a /region");
+        console.log("Registro exitoso, navegando a /home");
         onSuccess();
       }
     } catch (error) {
@@ -229,8 +226,8 @@ export const AuthProvider = ({ children }) => {
         setUser,
         status,
         setStatus,
-        login, // tu función de login
-        logout, // opcional: agregar si querés cerrar sesión
+        login,
+        logout,
         refreshUser,
         register
       }}
