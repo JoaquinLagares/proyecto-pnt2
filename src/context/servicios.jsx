@@ -15,7 +15,7 @@ export const getMatches = async (summonerName, tagLine) => {
     const puuid = accountData.puuid;
 
     const resMatchIds = await fetch(
-      `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10&api_key=${API_KEY}`
+      `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=5&api_key=${API_KEY}`
     );
     const matchIds = await resMatchIds.json();
     if (!Array.isArray(matchIds)) {
