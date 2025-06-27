@@ -51,6 +51,7 @@ export const getMatches = async (summonerName, tagLine, userId) => {
         const match = {
           matchId: id,
           userId: userId,
+          userId: userId,
           champion: player.championName,
           kills: player.kills,
           deaths: player.deaths,
@@ -59,6 +60,7 @@ export const getMatches = async (summonerName, tagLine, userId) => {
           mode: data.info.gameMode,
           duration: Math.floor(data.info.gameDuration / 60),
           timestamp: data.info.gameStartTimestamp,
+          likes: [],
           likes: [],
         };
         // console.log(match);

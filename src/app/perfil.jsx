@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
 import { usePartidas } from "../context/PartidasContext";
+import { usePartidas } from "../context/PartidasContext";
 
 export default function PerfilScreen() {
   const router = useRouter();
@@ -82,6 +83,19 @@ export default function PerfilScreen() {
         </View>
 
         {/* Partidas */}
+        {/* actualizar las partidas*/}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setLoading(true);
+            actualizarPartidas(user.perfilRiot, user.tagLineRiot).finally(() =>
+              setLoading(false)
+            );
+          }}
+        >
+          <Text style={styles.buttonText}>🔄 Actualizar</Text>
+        </TouchableOpacity>
+
         {/* actualizar las partidas*/}
         <TouchableOpacity
           style={styles.button}
