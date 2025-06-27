@@ -1,5 +1,5 @@
 // Servicio para encontrar cuenta de LOL
-const API_KEY = "RGAPI-d0b2308f-b199-414c-b0fa-b801f70903cc";
+const API_KEY = "RGAPI-ca5fde1e-c8d4-449f-b95b-86369e9926fd";
 
 export const getMatches = async (summonerName, tagLine, userId) => {
   try {
@@ -7,7 +7,7 @@ export const getMatches = async (summonerName, tagLine, userId) => {
       `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${summonerName}/${tagLine}?api_key=${API_KEY}`
     );
     const accountData = await resAccount.json();
-    console.log("Se encontro PUUID", accountData);
+    // console.log("Se encontro PUUID", accountData);
 
     if (!accountData.puuid) {
       console.error("No se encontro PUUID", accountData);
@@ -19,7 +19,7 @@ export const getMatches = async (summonerName, tagLine, userId) => {
       `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=5&api_key=${API_KEY}`
     );
     const matchIds = await resMatchIds.json();
-    console.log("Se encontro MatchIds", matchIds);
+    // console.log("Se encontro MatchIds", matchIds);
 
     if (!Array.isArray(matchIds)) {
       console.error("matchIds no es un array", matchIds);
@@ -29,14 +29,15 @@ export const getMatches = async (summonerName, tagLine, userId) => {
     const matches = await Promise.all(
       matchIds.map(async (id) => {
         // Verificamos si ya existe en MockAPI
-        const existingMatch = await fetch(
-          `https://683fa1935b39a8039a552628.mockapi.io/api/v1/matches?matchId=${id}`
+        const allMatchesRes = await fetch(
+          "https://683fa1935b39a8039a552628.mockapi.io/api/v1/Match"
         );
-        const existing = await existingMatch.json();
-        console.log("Se encontro match en mockAPI", existing);
+        const allMatches = await allMatchesRes.json();
+        const existing = allMatches.find((m) => m.matchId === id);
 
-        if (existing.length > 0) {
-          return existing[0];
+        if (existing) {
+          console.log("Hay partidas");
+          return existing;
         }
 
         // Si no existe, se llama a la API
@@ -60,10 +61,11 @@ export const getMatches = async (summonerName, tagLine, userId) => {
           timestamp: data.info.gameStartTimestamp,
           likes: [],
         };
+        // console.log(match);
 
         // Se guarda en mockAPI
         const resSaved = await fetch(
-          "https://683fa1935b39a8039a552628.mockapi.io/api/v1/matches",
+          "https://683fa1935b39a8039a552628.mockapi.io/api/v1/Match",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

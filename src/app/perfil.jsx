@@ -27,8 +27,8 @@ export default function PerfilScreen() {
 
   useEffect(() => {
     if (!partidasCache && user?.perfilRiot && user?.tagLineRiot) {
-      actualizarPartidas(user.perfilRiot, user.tagLineRiot).finally(() =>
-        setLoading(false)
+      actualizarPartidas(user.perfilRiot, user.tagLineRiot, user.id).finally(
+        () => setLoading(false)
       );
     } else {
       setLoading(false);
@@ -101,7 +101,11 @@ export default function PerfilScreen() {
             <Text style={{ color: "#aaa" }}>Cargando partidas...</Text>
           ) : partidasCache && partidasCache.length > 0 ? (
             <FlatList
-              data={partidasCache}
+              data={partidasCache?.filter(
+                (partida, index, self) =>
+                  partida?.matchId &&
+                  index === self.findIndex((p) => p.matchId === partida.matchId)
+              )}
               keyExtractor={(item, index) => item.matchId || index.toString()}
               renderItem={({ item }) => (
                 <View style={styles.matchCard}>
