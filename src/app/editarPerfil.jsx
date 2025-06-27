@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
+import CameraComponent from "../components/CameraComponent";
 import { useAuth } from "../context/AuthContext";
 import {
   ActivityIndicator,
@@ -10,14 +11,18 @@ import {
   View,
   ScrollView,
   Alert,
+  Modal,
+  Image
 } from "react-native";
 
 export default function EditarPerfil() {
+
   const router = useRouter();
 
   const { user, logout } = useAuth();
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cameraVisible, setCameraVisible] = useState(false);
 
   useEffect(() => {
     const fetchUsuario = async () => {
@@ -103,6 +108,33 @@ export default function EditarPerfil() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Editar Perfil</Text>
 
+      <TouchableOpacity onPress={() => setCameraVisible(true)} style={{ alignSelf: "center", marginBottom: 20 }}>
+        {usuario.avatar ? (
+          <Image
+            source={{ uri: usuario.avatar }}
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 75,
+              borderWidth: 2,
+              borderColor: "#11BD93"
+            }}
+          />
+        ) : (
+          <View style={{ width: 150, height: 150, backgroundColor: "#444", borderRadius: 75, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ color: "#fff" }}>Agregar Foto</Text>
+          </View>
+        )}
+      </TouchableOpacity>
+      <Modal visible={cameraVisible} animationType="slide">
+        <CameraComponent
+          onFotoTomada={(base64) => {
+            setUsuario({ ...usuario, avatar: base64 });
+            setCameraVisible(false);
+          }}
+          onCancelar={() => setCameraVisible(false)}
+        />
+      </Modal>
       {Object.entries(usuario).map(([key, value]) => (
         <View key={key} style={styles.inputGroup}>
           <Text style={styles.label}>{key}</Text>
