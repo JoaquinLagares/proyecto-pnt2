@@ -18,7 +18,7 @@ function ProtectedLayout() {
     if (!isAuth && !inAuthGroup) {
       router.replace("/login");
     } else if (isAuth && inAuthGroup) {
-      router.replace("/perfil");
+      router.replace("/home");
     }
   }, [isAuth, segments]);
 

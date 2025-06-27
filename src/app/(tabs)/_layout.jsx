@@ -2,6 +2,7 @@ import React from "react";
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../../context/AuthContext";
+import { Image } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -9,13 +10,13 @@ export default function TabLayout() {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let icon;
-          if (route.name === "index") {
-            icon = require("../../../assets/home-button.png");
-          } else if (route.name === "perfil") {
-            icon = require("../../../assets/profile-icon.png");
-          } else if (route.name === "buscadorUsuarios") {
-            icon = require("../../../assets/search-button.png");
-          }
+          // if (route.name === "index") {
+          //   icon = require("../../../assets/home-button.png");
+          // } else if (route.name === "perfil") {
+          //   icon = require("../../../assets/profile-icon.png");
+          // } else if (route.name === "buscadorUsuarios") {
+          //   icon = require("../../../assets/search-button.png");
+          // }
           return (
             <Image
               source={icon}
