@@ -15,25 +15,24 @@ import { getMatches } from "../context/servicios";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useAuth } from "../context/AuthContext";
-import BottomNavBar from "../components/BottomNavBar";
+import { usePartidas } from "../context/PartidasContext";
 
 export default function PerfilScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const [partidas, setPartidas] = useState();
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
+  const { partidasCache, actualizarPartidas } = usePartidas();
+  const [loading, setLoading] = useState(!partidasCache);
 
   useEffect(() => {
-    const cargarPartidas = async () => {
-      if (user?.perfilRiot && user?.tagLineRiot) {
-        const resultados = await getMatches(user.perfilRiot, user.tagLineRiot);
-        setPartidas(resultados);
-        console.log("Buscando partidas");
-      }
+    if (!partidasCache && user?.perfilRiot && user?.tagLineRiot) {
+      actualizarPartidas(user.perfilRiot, user.tagLineRiot, user.id).finally(
+        () => setLoading(false)
+      );
+    } else {
       setLoading(false);
-    };
-
-    cargarPartidas();
+    }
   }, [user]);
 
   if (!user) {
@@ -51,6 +50,8 @@ export default function PerfilScreen() {
       </View>
     );
   }
+
+  const partidasValidas = partidasCache?.filter((p) => !!p.matchId);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -81,14 +82,33 @@ export default function PerfilScreen() {
         </View>
 
         {/* Partidas */}
+        {/* actualizar las partidas*/}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setLoading(true);
+            actualizarPartidas(
+              user.perfilRiot,
+              user.tagLineRiot,
+              user.id
+            ).finally(() => setLoading(false));
+          }}
+        >
+          <Text style={styles.buttonText}>🔄 Actualizar</Text>
+        </TouchableOpacity>
+
         <View style={styles.matchesContainer}>
           <Text style={styles.title}>Recent Matches</Text>
           {loading ? (
             <Text style={{ color: "#aaa" }}>Cargando partidas...</Text>
-          ) : partidas.length > 0 ? (
+          ) : partidasCache && partidasCache.length > 0 ? (
             <FlatList
-              data={partidas}
-              keyExtractor={(item) => item.matchId}
+              data={partidasCache?.filter(
+                (partida, index, self) =>
+                  partida?.matchId &&
+                  index === self.findIndex((p) => p.matchId === partida.matchId)
+              )}
+              keyExtractor={(item, index) => item.matchId || index.toString()}
               renderItem={({ item }) => (
                 <View style={styles.matchCard}>
                   <Image
@@ -119,9 +139,6 @@ export default function PerfilScreen() {
           )}
         </View>
       </View>
-
-      {/* Barra inferior fija */}
-      {/* <BottomNavBar /> */}
     </SafeAreaView>
   );
 }
