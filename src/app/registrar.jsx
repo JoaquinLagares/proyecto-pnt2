@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { Link, useRouter } from 'expo-router'
-import ImagePickerComponent from '../components/ImagePickerComponent';
 
 
 export default function RegisterScreen() {
@@ -12,7 +11,7 @@ export default function RegisterScreen() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [imagenUri, setImagenUri] = useState(null);
+   
     //const [confirmRegion, setConfirmRegion] = useState('')
     const router = useRouter();
 

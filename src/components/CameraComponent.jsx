@@ -1,62 +1,107 @@
-import { Camera, CameraType } from "expo-camera";
+import { Camera } from "expo-camera";
 import { useRef, useState, useEffect } from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 
-
-export default function CameraComponent({onFotoTomada, onCancelar}) {
-  const[hasPermission, setHasPermission] = useState(null);
-  const [cameraType, setCameraType] = useState(CameraType.front);
+export default function CameraComponent({ onFotoTomada, onCancelar }) {
+  const [hasPermission, setHasPermission] = useState(null);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.front); 
   const cameraRef = useRef(null);
 
-  useEffect(() =>{
-    (async()=>{
-      const {status} = await Camera.requestCamerPermissionsAsync();
-      setHasPermission(status === "granted")
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
     })();
-  },[])
+  }, []);
 
-  const tomarFoto = async ()=>{
-    if (cameraRef.current){
-      const foto = await cameraRef.current.takePicture();
-      onFotoTomada(foto.uri);
+  const tomarFoto = async () => {
+    if (cameraRef.current) {
+      const foto = await cameraRef.current.takePictureAsync({ base64: true });
+      onFotoTomada(foto.uri); // También podés pasar foto.base64 si querés guardar el string
     }
-  }
+  };
 
   const alternarCamara = () => {
-    setCameraType((prev )=>
+    console.log("Camra: " ,camera);
+    setCameraType((prev) =>
       prev === Camera.Constants.Type.back
-        ?Camera.Type.Constants.front
-        :Camera.Type.Constants.front
-    
-    )
-  }
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
+  };
 
-  if (hasPermission === null) return <View/>
-  if (hasPermission)
-    return(
-      <View>
-        <Text> No se ortorgaron permisos para la camara</Text>
+  if (hasPermission === null) return <View />;
+  if (!hasPermission)
+    return (
+      <View style={styles.permissionDenied}>
+        <Text style={styles.permissionText}>No se otorgaron permisos para la cámara</Text>
+        <TouchableOpacity onPress={onCancelar} style={styles.cancelButton}>
+          <Text style={styles.cancelText}>Volver</Text>
+        </TouchableOpacity>
       </View>
-    )
+    );
+
   return (
-   <Camera style={{ flex: 1 }} type={cameraType} ref={cameraRef}>
-      <View style={{ flex: 1, justifyContent: "flex-end", padding: 20 }}>
-        <TouchableOpacity
-          style={{ backgroundColor: "white", padding: 10, borderRadius: 5 }}
-          onPress={tomarFoto}
-        >
-          <Text>Tomar Foto</Text>
+    <Camera style={{ flex: 1 }} type={cameraType} ref={cameraRef}>
+      <View style={styles.controls}>
+        <TouchableOpacity style={styles.captureButton} onPress={tomarFoto}>
+          <Text style={styles.buttonText}>Tomar Foto</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={alternarCamara} style={{ marginTop: 10 }}>
-          <Text style={{ color: "white", textAlign: "center" }}>Cambiar Cámara</Text>
+        <TouchableOpacity onPress={alternarCamara} style={styles.switchButton}>
+          <Text style={styles.buttonText}>Cambiar Cámara</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={onCancelar} style={{ marginTop: 10 }}>
-          <Text style={{ color: "white", textAlign: "center" }}>Cancelar</Text>
+        <TouchableOpacity onPress={onCancelar} style={styles.cancelButton}>
+          <Text style={styles.cancelText}>Cancelar</Text>
         </TouchableOpacity>
       </View>
     </Camera>
   );
 }
 
+const styles = StyleSheet.create({
+  controls: {
+    flex: 1,
+    justifyContent: "flex-end",
+    padding: 20,
+  },
+  captureButton: {
+    backgroundColor: "white",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  switchButton: {
+    backgroundColor: "#11BD93",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  cancelButton: {
+    backgroundColor: "#ff4444",
+    padding: 12,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#0e0e11",
+    fontWeight: "bold",
+  },
+  cancelText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  permissionDenied: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#0e0e11",
+  },
+  permissionText: {
+    color: "#fff",
+    marginBottom: 20,
+  },
+});

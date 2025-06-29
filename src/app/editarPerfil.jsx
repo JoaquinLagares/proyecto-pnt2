@@ -126,15 +126,15 @@ export default function EditarPerfil() {
           </View>
         )}
       </TouchableOpacity>
-      <Modal visible={cameraVisible} animationType="slide">
-        <CameraComponent
-          onFotoTomada={(base64) => {
-            setUsuario({ ...usuario, avatar: base64 });
-            setCameraVisible(false);
-          }}
-          onCancelar={() => setCameraVisible(false)}
-        />
-      </Modal>
+     <Modal visible={cameraVisible} >
+  <CameraComponent
+    onFotoTomada={(uri) => {
+      setUsuario({ ...usuario, avatar: uri });
+      setCameraVisible(false);
+    }}
+    onCancelar={() => setCameraVisible(false)}
+  />
+</Modal>
       {Object.entries(usuario).map(([key, value]) => (
         <View key={key} style={styles.inputGroup}>
           <Text style={styles.label}>{key}</Text>
