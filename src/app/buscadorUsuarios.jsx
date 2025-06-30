@@ -1,11 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { TextInput, FlatList, View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { useUser } from '../context/UserContext';
+import React, { useEffect, useState } from "react";
+import {
+  TextInput,
+  FlatList,
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import { useUser } from "../context/UserContext";
+import { useRouter } from "expo-router";
 
 export default function BuscarUsuario() {
   const { usuarios, buscarUsuarios, loading } = useUser();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [debounceTimer, setDebounceTimer] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (debounceTimer) clearTimeout(debounceTimer);
@@ -34,16 +44,23 @@ export default function BuscarUsuario() {
           data={usuarios}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Text style={styles.name}>{item.username}</Text>
-              <Text style={styles.text}>Región: {item.region}</Text>
-              <Text style={styles.text}>
-                Perfil Riot: {item.perfilRiot}#{item.tagLineRiot}
-              </Text>
-              <Text style={styles.text}>Steam: {item.steam}</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => router.push(`/perfilAjeno/${item.id}`)}
+              style={styles.card}
+            >
+              <View style={styles.card}>
+                <Text style={styles.name}>{item.username}</Text>
+                <Text style={styles.text}>Región: {item.region}</Text>
+                <Text style={styles.text}>
+                  Perfil Riot: {item.perfilRiot}#{item.tagLineRiot}
+                </Text>
+                <Text style={styles.text}>Steam: {item.steam}</Text>
+              </View>
+            </TouchableOpacity>
           )}
-          ListEmptyComponent={<Text style={styles.text}>No se encontraron usuarios.</Text>}
+          ListEmptyComponent={
+            <Text style={styles.text}>No se encontraron usuarios.</Text>
+          }
         />
       )}
     </View>
@@ -51,25 +68,24 @@ export default function BuscarUsuario() {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20, flex: 1, backgroundColor: '#121212' },
+  container: { padding: 20, flex: 1, backgroundColor: "#121212" },
   input: {
-    backgroundColor: '#1e1e1e',
-    color: '#fff',
+    backgroundColor: "#1e1e1e",
+    color: "#fff",
     padding: 10,
     borderRadius: 10,
     marginBottom: 15,
-    borderColor: '#333',
+    borderColor: "#333",
     borderWidth: 1,
   },
   card: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: "#1e1e1e",
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
-    borderColor: '#333',
+    borderColor: "#333",
     borderWidth: 1,
   },
-  name: { fontSize: 18, fontWeight: 'bold', color: '#fff' },
-  text: { color: '#ccc' },
+  name: { fontSize: 18, fontWeight: "bold", color: "#fff" },
+  text: { color: "#ccc" },
 });
-
