@@ -70,7 +70,7 @@ export default function PerfilScreen() {
 
         {/* Perfil */}
         <View style={styles.profile}>
-          <Image source={user.imagen} style={styles.avatar} />
+          <Image source={{ uri: user.avatar }} style={styles.avatar} />
           <Text style={styles.username}>{user.nombre}</Text>
           <Text style={styles.region}>
             Region: {user.region || "Sin región"}
@@ -106,8 +106,7 @@ export default function PerfilScreen() {
                     </Text>
                     <Text style={styles.modo}>{item.mode}</Text>
                     <Text style={styles.score}>
-                      {item.kills}/{item.deaths}/{item.assists} —{" "}
-                      {item.champion}
+                      {item.kills}/{item.deaths}/{item.assists} — {item.champion}
                     </Text>
                     <Text style={styles.tiempo}>{item.duration} min</Text>
                   </View>
@@ -119,62 +118,60 @@ export default function PerfilScreen() {
           )}
         </View>
       </View>
-
-      {/* Barra inferior fija */}
-      {/* <BottomNavBar /> */}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#0e0e11",
+    padding: 16,
+  },
   header: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logoutButton: {
     padding: 10,
   },
   editButton: {
+    padding: 10,
     backgroundColor: "#11BD93",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
     borderRadius: 8,
   },
-
   editButtonText: {
     color: "white",
     fontWeight: "bold",
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#0e0e11",
-    padding: 20,
-    paddingBottom: 80,
-  },
   profile: {
     alignItems: "center",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    marginBottom: 10,
     borderColor: "#11BD93",
     borderWidth: 2,
   },
   username: {
-    fontSize: 24,
-    color: "#fff",
+    fontSize: 20,
+    color: "white",
     fontWeight: "bold",
-    marginTop: 10,
   },
   region: {
+    fontSize: 14,
     color: "#aaa",
-    marginVertical: 5,
+    marginBottom: 10,
   },
   button: {
     backgroundColor: "#11BD93",
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
   },
   buttonText: {
     color: "#0e0e11",
@@ -184,49 +181,40 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontSize: 20,
-    color: "#11BD93",
+    fontSize: 18,
+    color: "white",
     marginBottom: 10,
   },
   matchCard: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#1a1f2e",
-    borderRadius: 10,
-    padding: 15,
+    padding: 10,
     marginBottom: 10,
+    borderRadius: 10,
   },
   icon: {
     width: 40,
     height: 40,
-    marginRight: 15,
+    marginRight: 10,
   },
   result: {
-    fontWeight: "bold",
     fontSize: 16,
+    fontWeight: "bold",
   },
   victory: {
-    color: "#00FF88",
+    color: "#11BD93",
   },
   defeat: {
-    color: "#FF4081",
+    color: "#ff4444",
   },
   modo: {
-    color: "#aaa",
-    fontSize: 14,
+    color: "#ccc",
   },
   score: {
     color: "#fff",
-    fontSize: 14,
   },
   tiempo: {
-    color: "#666",
-    fontSize: 12,
-  },
-  logoutButton: {
-    backgroundColor: "#ff5555",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 8,
+    color: "#aaa",
   },
 });
