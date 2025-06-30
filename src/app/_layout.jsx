@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { PartidasProvider } from "../context/PartidasContext";
 import { JugadoresProvider } from "../context/JugadoresContext";
 import { PerfilAjenoProvider } from "../context/PerfilAjenoContext";
+import { LikesProvider } from "../context/LikesContext";
 
 function ProtectedLayout() {
   const { isAuth } = useAuth();
@@ -40,7 +41,9 @@ export default function LayoutPrincipal() {
         <PartidasProvider>
           <JugadoresProvider>
             <PerfilAjenoProvider>
-              <ProtectedLayout />
+              <LikesProvider>
+                <ProtectedLayout />
+              </LikesProvider>
             </PerfilAjenoProvider>
           </JugadoresProvider>
         </PartidasProvider>

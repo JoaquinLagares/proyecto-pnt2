@@ -14,14 +14,16 @@ import {
 import { getMatches } from "../context/servicios";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+
 import { useAuth } from "../context/AuthContext";
 import { usePartidas } from "../context/PartidasContext";
+import { useLikes } from "../context/LikesContext";
+import { useUser } from "../context/UserContext";
 
 export default function PerfilScreen() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const [partidas, setPartidas] = useState();
-  // const [loading, setLoading] = useState(true);
   const { partidasCache, actualizarPartidas } = usePartidas();
   const [loading, setLoading] = useState(!partidasCache);
 
@@ -34,6 +36,8 @@ export default function PerfilScreen() {
       setLoading(false);
     }
   }, [user]);
+
+  const { toggleLike, hasUserLiked } = useLikes();
 
   if (!user) {
     console.log("No cargo user", user);
@@ -82,7 +86,6 @@ export default function PerfilScreen() {
         </View>
 
         {/* Partidas */}
-        {/* actualizar las partidas*/}
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
@@ -130,6 +133,22 @@ export default function PerfilScreen() {
                       {item.champion}
                     </Text>
                     <Text style={styles.tiempo}>{item.duration} min</Text>
+                  </View>
+                  <View style={{ alignItems: "center" }}>
+                    <TouchableOpacity onPress={() => toggleLike(item, user.id)}>
+                      <Ionicons
+                        name={
+                          hasUserLiked(item, user.id)
+                            ? "heart"
+                            : "heart-outline"
+                        }
+                        size={20}
+                        color={hasUserLiked(item, user.id) ? "red" : "#aaa"}
+                      />
+                    </TouchableOpacity>
+                    <Text style={{ color: "#aaa", fontSize: 12 }}>
+                      {item.likes?.length || 0}
+                    </Text>
                   </View>
                 </View>
               )}

@@ -18,7 +18,7 @@ export const JugadoresProvider = ({ children }) => {
         users.map(async (user) => {
           try {
             const resPartidas = await fetch(
-              `https://683fa1935b39a8039a552628.mockapi.io/api/v1/matches?userId=${user.id}&sortBy=timestamp&order=desc`
+              `https://683fa1935b39a8039a552628.mockapi.io/api/v1/Match?userId=${user.id}&sortBy=timestamp&order=desc`
             );
             const partidas = await resPartidas.json();
             return { ...user, partidas };

@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
+import { useAuth } from "./AuthContext";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  const { user } = useAuth();
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +31,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ usuarios, buscarUsuarios, loading }}>
+    <UserContext.Provider value={{ usuarios, buscarUsuarios, loading, user }}>
       {children}
     </UserContext.Provider>
   );

@@ -11,10 +11,15 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { usePerfilAjeno } from "../../context/PerfilAjenoContext";
+import { useLikes } from "../../context/LikesContext";
+import { useUser } from "../../context/UserContext";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function PerfilAjeno() {
   const { id } = useLocalSearchParams();
   const { usuario, partidas, loading, fetchPerfilAjeno } = usePerfilAjeno();
+  const { user } = useUser();
+  const { toggleLike, hasUserLiked } = useLikes();
 
   useEffect(() => {
     if (id) {
@@ -53,7 +58,7 @@ export default function PerfilAjeno() {
               source={require("../../../assets/lol-icon.png")}
               style={styles.icon}
             />
-            <View>
+            <View style={{ flex: 1 }}>
               <Text
                 style={[
                   styles.result,
@@ -67,6 +72,17 @@ export default function PerfilAjeno() {
                 {item.kills}/{item.deaths}/{item.assists} — {item.champion}
               </Text>
               <Text style={styles.tiempo}>{item.duration} min</Text>
+            </View>
+
+            <View style={styles.likeContainer}>
+              <TouchableOpacity onPress={() => toggleLike(item, user.id)}>
+                <Ionicons
+                  name={hasUserLiked(item, user.id) ? "heart" : "heart-outline"}
+                  size={20}
+                  color={hasUserLiked(item, user.id) ? "red" : "#aaa"}
+                />
+              </TouchableOpacity>
+              <Text style={styles.likesCount}>{item.likes?.length || 0}</Text>
             </View>
           </View>
         )}
@@ -150,5 +166,15 @@ const styles = StyleSheet.create({
   tiempo: {
     color: "#666",
     fontSize: 12,
+  },
+  likeContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 10,
+  },
+  likesCount: {
+    color: "#ccc",
+    fontSize: 12,
+    marginTop: 2,
   },
 });

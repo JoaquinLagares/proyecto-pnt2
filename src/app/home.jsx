@@ -6,14 +6,20 @@ import {
   View,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { ActivityIndicator } from "react-native";
-// import { getMatches } from "../context/servicios";
+import { Ionicons } from "@expo/vector-icons";
+
 import { useJugadores } from "../context/JugadoresContext";
+import { useLikes } from "../context/LikesContext";
+import { useUser } from "../context/UserContext";
 
 export default function Home() {
   const { jugadores, loading } = useJugadores();
   const [query, setQuery] = useState("");
+  const { toggleLike, hasUserLiked } = useLikes();
+  const { user } = useUser();
 
   return (
     <View style={styles.container}>
@@ -62,6 +68,26 @@ export default function Home() {
                       {item.partidas[0].duration} min
                     </Text>
                   </View>
+                  {user && (
+                    <TouchableOpacity
+                      onPress={() => toggleLike(item.partidas[0].matchId)}
+                    >
+                      <Ionicons
+                        name={
+                          hasUserLiked(item.partidas[0], user.id)
+                            ? "heart"
+                            : "heart-outline"
+                        }
+                        size={20}
+                        color={
+                          hasUserLiked(item.partidas[0], user.id)
+                            ? "red"
+                            : "#aaa"
+                        }
+                      />
+                    </TouchableOpacity>
+                  )}
+                  <Text>{item.partidas[0].likes?.length || 0}</Text>
                 </View>
               ) : (
                 <Text style={styles.text}>No se encontraron partidas.</Text>
