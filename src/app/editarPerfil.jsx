@@ -16,7 +16,7 @@ import {
 
 export default function EditarPerfil() {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, setUser } = useAuth();
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -71,6 +71,10 @@ export default function EditarPerfil() {
       );
 
       if (!res.ok) throw new Error("Error al guardar los cambios");
+
+      const dataActualizada = await res.json();
+      setUsuario(dataActualizada);
+      setUser(dataActualizada);
 
       alert("Cambios guardados con éxito");
       router.back();
