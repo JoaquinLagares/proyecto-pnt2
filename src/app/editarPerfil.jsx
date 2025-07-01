@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import * as ImagePicker from 'expo-image-picker';
 import {
   ActivityIndicator,
   Text,
@@ -10,11 +11,11 @@ import {
   View,
   ScrollView,
   Alert,
+  Image
 } from "react-native";
 
 export default function EditarPerfil() {
   const router = useRouter();
-
   const { user, logout } = useAuth();
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +37,24 @@ export default function EditarPerfil() {
     fetchUsuario();
   }, []);
 
+  const tomarFoto = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permiso denegado', 'Se necesita permiso para usar la cámara');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setUsuario({ ...usuario, avatar: result.assets[0].uri });
+    }
+  };
+
   const handleChange = (field, value) => {
     setUsuario({ ...usuario, [field]: value });
   };
@@ -53,22 +72,22 @@ export default function EditarPerfil() {
 
       if (!res.ok) throw new Error("Error al guardar los cambios");
 
-      alert("Cambios guardados con exito");
+      alert("Cambios guardados con éxito");
       router.back();
     } catch (err) {
-      console.error("Error alguardar:", err);
+      console.error("Error al guardar:", err);
       alert("Hubo un error al guardar los cambios");
     }
   };
 
   const handleEliminar = () => {
     Alert.alert(
-      "Eliminar Cuenta?",
-      "Esta accion no se puede deshacer. Queres continuar?",
+      "¿Eliminar cuenta?",
+      "Esta acción no se puede deshacer. ¿Querés continuar?",
       [
         { text: "Cancelar", style: "cancel" },
         {
-          text: "Si, eliminar",
+          text: "Sí, eliminar",
           style: "destructive",
           onPress: async () => {
             try {
@@ -83,7 +102,7 @@ export default function EditarPerfil() {
               router.replace("/login");
             } catch (err) {
               console.error("Error al eliminar cuenta:", err);
-              alert("No se pudo eliminar la cuenta. Intenta mas tarde.");
+              alert("No se pudo eliminar la cuenta. Intenta más tarde.");
             }
           },
         },
@@ -102,6 +121,36 @@ export default function EditarPerfil() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Editar Perfil</Text>
+
+      <TouchableOpacity onPress={tomarFoto} style={{ alignSelf: "center", marginBottom: 10 }}>
+        {usuario.avatar ? (
+          <Image
+            source={{ uri: usuario.avatar }}
+            style={{
+              width: 150,
+              height: 150,
+              borderRadius: 75,
+              borderWidth: 2,
+              borderColor: "#11BD93"
+            }}
+          />
+        ) : (
+          <View style={{
+            width: 150,
+            height: 150,
+            backgroundColor: "#444",
+            borderRadius: 75,
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+            <Text style={{ color: "#fff" }}>Agregar Foto</Text>
+          </View>
+        )}
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={tomarFoto} style={styles.editPhotoButton}>
+        <Text style={styles.editPhotoText}>Editar Foto</Text>
+      </TouchableOpacity>
 
       {Object.entries(usuario).map(([key, value]) => (
         <View key={key} style={styles.inputGroup}>
@@ -194,5 +243,14 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  editPhotoButton: {
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  editPhotoText: {
+    color: "#11BD93",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });

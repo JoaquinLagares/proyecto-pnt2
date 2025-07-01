@@ -21,7 +21,7 @@ export default function RegisterScreen() {
   const [imagenUri, setImagenUri] = useState(null);
   //const [confirmRegion, setConfirmRegion] = useState('')
   const router = useRouter();
-
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
